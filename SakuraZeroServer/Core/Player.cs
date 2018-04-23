@@ -8,5 +8,6 @@ namespace SakuraZeroServer.Core
 {
     class Player
     {
+        int i = 1;
     }
 }
