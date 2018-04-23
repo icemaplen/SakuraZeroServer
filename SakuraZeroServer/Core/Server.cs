@@ -25,7 +25,6 @@ namespace SakuraZeroServer
                 return -1;
             }
 
-
             for (int i = 0; i < conns.Length; i++)
             {
                 if (conns[i] == null)
