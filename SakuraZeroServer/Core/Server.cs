@@ -79,7 +79,7 @@ namespace SakuraZeroServer
             }
             catch (System.Exception ex)
             {
-                Console.WriteLine("Accept失败："+ex.Message);
+                Console.WriteLine("Accept失败：" + ex.Message);
             }
         }
 
@@ -105,7 +105,7 @@ namespace SakuraZeroServer
                     {
                         continue;
                     }
-                    Console.WriteLine("将消息传播给 "+conns[i].GetAddress());
+                    Console.WriteLine("将消息传播给 " + conns[i].GetAddress());
                     conns[i].socket.Send(bytes);
                 }
 
@@ -113,7 +113,7 @@ namespace SakuraZeroServer
             }
             catch (System.Exception ex)
             {
-                Console.WriteLine($"收到[{conn.GetAddress()}]断开连接");
+                Console.WriteLine($"收到[{conn.GetAddress()}]断开连接:" + ex);
                 conn.Close();
             }
         }

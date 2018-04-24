@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SakuraZeroServer.Core;
 
 namespace SakuraZeroServer
 {
@@ -10,6 +11,8 @@ namespace SakuraZeroServer
     {
         static void Main(string[] args)
         {
+            //Console.WriteLine(DataManager.Instance.Register("123","123"));
+            Console.WriteLine(DataManager.Instance.VerifyUser("123","123")?.Username);
         }
     }
 }

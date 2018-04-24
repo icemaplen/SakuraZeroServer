@@ -47,19 +47,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Conn.cs" />
-    <Compile Include="Core\Player.cs" />
-    <Compile Include="Core\Player2.cs" />
+    <Compile Include="Core\DataManager.cs" />
+    <Compile Include="DAO\PlayerDAO.cs" />
+    <Compile Include="DAO\UserDAO.cs" />
+    <Compile Include="Model\Player.cs" />
+    <Compile Include="Model\Role.cs" />
+    <Compile Include="Model\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\Server.cs" />
+    <Compile Include="Tool\MD5Hash.cs" />
+    <Compile Include="Tool\SqlConnHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controller\" />
-    <Folder Include="DAO\" />
-    <Folder Include="Model\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SakuraZeroCommon\SakuraZeroCommon.csproj">
+      <Project>{40c3b3cd-5583-428e-a27d-e077013bb118}</Project>
+      <Name>SakuraZeroCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
