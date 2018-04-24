@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SakuraZeroServer.Model
 {
-    public class Role
+    public class RoleModel
     {
         public int ID { get; set; }
         public string Name { get; set; }
@@ -21,10 +21,8 @@ namespace SakuraZeroServer.Model
         public Pos pos { get; set; }
         public int Attack { get; set; }
         public float HitRate { get; set; }      // 命中率
-        public float CritRate { get; set; }     // 暴击率
-        public float CritAttack { get; set; }   // 暴击伤害
         public float Puncture { get; set; }     // 穿刺
-        public float Defence { get; set; }      // 穿刺
+        public float Defence { get; set; }      // 防御
         public float DodgeRate { get; set; }    // 闪避率
     }
 }

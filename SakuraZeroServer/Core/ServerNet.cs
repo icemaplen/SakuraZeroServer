@@ -8,8 +8,23 @@ using System.Threading.Tasks;
 
 namespace SakuraZeroServer
 {
-    class Server
+    public class ServerNet
     {
+        #region 单例模式
+        private static ServerNet instance;
+        public static ServerNet Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new ServerNet();
+                }
+                return instance;
+            }
+        }
+        #endregion
+
         public Socket listenfd;
         public Conn[] conns;
         public int maxConnCount = 50;       //最大连接数
@@ -115,6 +130,20 @@ namespace SakuraZeroServer
             {
                 Console.WriteLine($"收到[{conn.GetAddress()}]断开连接:" + ex);
                 conn.Close();
+            }
+        }
+
+        public void Close()
+        {
+            foreach (Conn c in conns)
+            {
+                if (c != null && c.isUse == true)
+                {
+                    lock (c)
+                    {
+                        c.Close();
+                    }
+                }
             }
         }
     }

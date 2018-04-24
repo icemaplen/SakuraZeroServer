@@ -45,7 +45,7 @@ namespace SakuraZeroServer.Core
             return userDao.AddUser(sqlConn, username, password);
         }
 
-        public User VerifyUser(string username, string password)
+        public UserModel VerifyUser(string username, string password)
         {
             return userDao.VerifyUser(sqlConn, username, password);
         }

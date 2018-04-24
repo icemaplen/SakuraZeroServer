@@ -11,7 +11,7 @@ namespace SakuraZeroServer.DAO
 {
     public class UserDAO
     {
-        public User VerifyUser(MySqlConnection conn, string username, string password)
+        public UserModel VerifyUser(MySqlConnection conn, string username, string password)
         {
             MySqlDataReader reader = null;
             try
@@ -23,7 +23,7 @@ namespace SakuraZeroServer.DAO
                 if (reader.Read())
                 {
                     int id = reader.GetInt32("id");
-                    User user = new User(id, username, password);
+                    UserModel user = new UserModel(id, username, password);
                     return user;
                 }
                 else
