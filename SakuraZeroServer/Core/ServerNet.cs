@@ -7,6 +7,8 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using SakuraZeroServer.Tool;
+using SakuraZeroCommon.Prorocal;
+using SakuraZeroCommon.Core;
 
 namespace SakuraZeroServer.Core
 {
@@ -33,6 +35,8 @@ namespace SakuraZeroServer.Core
 
         private System.Timers.Timer timer = new System.Timers.Timer(1000);      // 主定时器
         public long heartBeatTime = 10;
+        
+        public ProtocalBase protocal;
 
         /// <summary>
         /// 获得连接池索引.
@@ -122,9 +126,10 @@ namespace SakuraZeroServer.Core
                 }
 
                 conn.buffCount += count;
-                ProcessData(conn);
                 //string str = Encoding.UTF8.GetString(conn.readBuff, 0, count);
                 //Console.WriteLine($"收到[{conn.GetAddress()}]的数据：{str}");
+
+                ProcessData(conn);
                 //str = $"{conn.GetAddress()}:{str}";
                 //byte[] bytes = Encoding.UTF8.GetBytes(str);
                 //for (int i = 0; i < conns.Length; i++)
@@ -161,8 +166,10 @@ namespace SakuraZeroServer.Core
             }
 
             // 处理消息
-            string str = Encoding.UTF8.GetString(conn.readBuff, sizeof(Int32), conn.msgLength);
-            Console.WriteLine($"收到来自[{conn.GetAddress()}]的消息{str}");
+            //string str = Encoding.UTF8.GetString(conn.readBuff, sizeof(Int32), conn.msgLength);
+            //Console.WriteLine($"收到来自[{conn.GetAddress()}]的消息{str}");
+            ProtocalBase proto = protocal.Decode(conn.readBuff, sizeof(Int32), conn.msgLength);
+            HandleMsg(conn, proto);
             // Send(conn,str);
             // 清除已处理的消息
             int count = conn.buffCount - conn.msgLength - sizeof(Int32);
@@ -174,10 +181,25 @@ namespace SakuraZeroServer.Core
             }
         }
 
-
-        public void Send(Conn conn, string str)
+        private void HandleMsg(Conn conn, ProtocalBase protocalBase)
         {
-            byte[] bytes = Encoding.UTF8.GetBytes(str);
+            ERequestCode requestCode = protocalBase.RequestCode;
+            EActionCode actionCode = protocalBase.ActionCode;
+            Console.WriteLine("收到协议:" + requestCode.ToString()+"---"+ actionCode.ToString());
+            //if (requestCode == )
+            //{
+            //    Console.WriteLine("更新心跳时间"+conn.GetAddress());
+            //    conn.lastTickTime = TimeStamp.GetTimeStamp();
+            //}
+
+            // 回射
+            //Send(conn, protocalBase);
+        }
+
+
+        public void Send(Conn conn, ProtocalBase protocal)
+        {
+            byte[] bytes = protocal.Encode();
             byte[] length = BitConverter.GetBytes(bytes.Length);
             byte[] sendBuff = length.Concat(bytes).ToArray();
 
@@ -191,11 +213,22 @@ namespace SakuraZeroServer.Core
             }
         }
 
+        public void Broadcast(ProtocalBase protocal)
+        {
+            foreach (Conn c in conns)
+            {
+                if (c != null && c.isUse)
+                {
+                    Send(c, protocal);
+                }
+            }
+        }
+
         public void Close()
         {
             foreach (Conn c in conns)
             {
-                if (c != null && c.isUse == true)
+                if (c != null && c.isUse)
                 {
                     lock (c)
                     {
@@ -208,7 +241,7 @@ namespace SakuraZeroServer.Core
         public void HandleMainTimer(object sender, System.Timers.ElapsedEventArgs e)
         {
             // 处理心跳
-            HeartBeat();
+            //HeartBeat();
             timer.Start();
         }
 

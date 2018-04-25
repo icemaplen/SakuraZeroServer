@@ -51,7 +51,6 @@
     <Compile Include="Controller\UserController.cs" />
     <Compile Include="Core\Conn.cs" />
     <Compile Include="Core\DataManager.cs" />
-    <Compile Include="Core\HandleMessage.cs" />
     <Compile Include="DAO\PlayerDAO.cs" />
     <Compile Include="DAO\UserDAO.cs" />
     <Compile Include="Model\EnemyModel.cs" />

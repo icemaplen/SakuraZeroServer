@@ -1,6 +1,6 @@
 ﻿namespace SakuraZeroCommon.Core
 {
-    public enum ActionCode
+    public enum EActionCode
     {
         None,
 
