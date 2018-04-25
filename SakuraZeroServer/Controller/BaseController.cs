@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SakuraZeroCommon.Core
+namespace SakuraZeroServer.Controller
 {
-    class ReturnCode
+    public class BaseController
     {
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SakuraZeroServer.Tool
 {
-    static class SqlConnHelper
+    public static class SqlConnHelper
     {
         public const string CONNECTION_STRING = "server=119.28.54.205; port=3306; database=sakurazero; uid=root; pwd=12345679; charset=utf8";
 

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SakuraZeroServer.DAO;
 
-namespace SakuraZeroCommon.Core
+namespace SakuraZeroServer.Controller
 {
-    class ReturnCode
+    public class UserController
     {
+        private UserDAO userDAO;
     }
 }

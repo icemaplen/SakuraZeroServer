@@ -46,9 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\BaseController.cs" />
     <Compile Include="Controller\PlayerController.cs" />
+    <Compile Include="Controller\UserController.cs" />
     <Compile Include="Core\Conn.cs" />
     <Compile Include="Core\DataManager.cs" />
+    <Compile Include="Core\HandleMessage.cs" />
     <Compile Include="DAO\PlayerDAO.cs" />
     <Compile Include="DAO\UserDAO.cs" />
     <Compile Include="Model\EnemyModel.cs" />
@@ -60,11 +63,11 @@
     <Compile Include="Core\ServerNet.cs" />
     <Compile Include="Tool\MD5Hash.cs" />
     <Compile Include="Tool\SqlConnHelper.cs" />
+    <Compile Include="Tool\TimeStamp.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\SakuraZeroCommon\SakuraZeroCommon.csproj">
       <Project>{40c3b3cd-5583-428e-a27d-e077013bb118}</Project>

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using SakuraZeroServer.Core;
 using SakuraZeroServer.Controller;
+using SakuraZeroServer.Tool;
 
-namespace SakuraZeroServer
+namespace SakuraZeroServer.Core
 {
    public  class Conn
     {
@@ -37,7 +37,7 @@ namespace SakuraZeroServer
             isUse = true;
             buffCount = 0;
             // 心跳处理
-            // TODO
+            lastTickTime = TimeStamp.GetTimeStamp();
         }
 
         public string GetAddress()

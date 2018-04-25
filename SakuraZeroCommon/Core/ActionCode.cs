@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SakuraZeroCommon
+﻿namespace SakuraZeroCommon.Core
 {
-    class ActionCode
+    public enum ActionCode
     {
+        None,
+
+        // System
+        HeartBeat,
+
+        // User
+        Login,
+        Register
     }
 }
