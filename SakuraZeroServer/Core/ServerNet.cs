@@ -36,7 +36,7 @@ namespace SakuraZeroServer.Core
         private System.Timers.Timer timer = new System.Timers.Timer(1000);      // 主定时器
         public long heartBeatTime = 10;
         
-        public ProtocalBase protocal;
+        public ProtocolBase protocol;
 
         /// <summary>
         /// 获得连接池索引.
@@ -168,7 +168,7 @@ namespace SakuraZeroServer.Core
             // 处理消息
             //string str = Encoding.UTF8.GetString(conn.readBuff, sizeof(Int32), conn.msgLength);
             //Console.WriteLine($"收到来自[{conn.GetAddress()}]的消息{str}");
-            ProtocalBase proto = protocal.Decode(conn.readBuff, sizeof(Int32), conn.msgLength);
+            ProtocolBase proto = protocol.Decode(conn.readBuff, sizeof(Int32), conn.msgLength);
             HandleMsg(conn, proto);
             // Send(conn,str);
             // 清除已处理的消息
@@ -181,10 +181,10 @@ namespace SakuraZeroServer.Core
             }
         }
 
-        private void HandleMsg(Conn conn, ProtocalBase protocalBase)
+        private void HandleMsg(Conn conn, ProtocolBase protocolBase)
         {
-            ERequestCode requestCode = protocalBase.RequestCode;
-            EActionCode actionCode = protocalBase.ActionCode;
+            ERequestCode requestCode = protocolBase.RequestCode;
+            EActionCode actionCode = protocolBase.ActionCode;
             Console.WriteLine("收到协议:" + requestCode.ToString()+"---"+ actionCode.ToString());
             //if (requestCode == )
             //{
@@ -193,13 +193,13 @@ namespace SakuraZeroServer.Core
             //}
 
             // 回射
-            //Send(conn, protocalBase);
+            //Send(conn, protocolBase);
         }
 
 
-        public void Send(Conn conn, ProtocalBase protocal)
+        public void Send(Conn conn, ProtocolBase protocol)
         {
-            byte[] bytes = protocal.Encode();
+            byte[] bytes = protocol.Encode();
             byte[] length = BitConverter.GetBytes(bytes.Length);
             byte[] sendBuff = length.Concat(bytes).ToArray();
 
@@ -213,13 +213,13 @@ namespace SakuraZeroServer.Core
             }
         }
 
-        public void Broadcast(ProtocalBase protocal)
+        public void Broadcast(ProtocolBase protocol)
         {
             foreach (Conn c in conns)
             {
                 if (c != null && c.isUse)
                 {
-                    Send(c, protocal);
+                    Send(c, protocol);
                 }
             }
         }

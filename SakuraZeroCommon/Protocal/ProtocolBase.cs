@@ -2,7 +2,7 @@
 
 namespace SakuraZeroCommon.Prorocal
 {
-    public class ProtocalBase
+    public class ProtocolBase
     {
 
         public virtual ERequestCode RequestCode
@@ -17,15 +17,15 @@ namespace SakuraZeroCommon.Prorocal
             protected set;
         }
 
-        public ProtocalBase()
+        public ProtocolBase()
         {
 
         }
 
         // 解码器，解码readbuff中从start开始的length字节
-        public virtual ProtocalBase Decode(byte[] readBuff, int start, int length)
+        public virtual ProtocolBase Decode(byte[] readBuff, int start, int length)
         {
-            return new ProtocalBase();
+            return new ProtocolBase();
         }
 
         // 编码器

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SakuraZeroCommon.Prorocal
 {
-    public class ProtocalBytes : ProtocalBase
+    public class ProtocolBytes : ProtocolBase
     {
         public byte[] bytes;        //传输的字节流
         public override ERequestCode RequestCode
@@ -20,7 +20,7 @@ namespace SakuraZeroCommon.Prorocal
             protected set;
         }
 
-        public ProtocalBytes()
+        public ProtocolBytes()
         {
             AddInt((int)ERequestCode.None);
             AddInt((int)EActionCode.None);
@@ -31,7 +31,7 @@ namespace SakuraZeroCommon.Prorocal
         /// </summary>
         /// <param name="request"></param>
         /// <param name="action"></param>
-        public ProtocalBytes(ERequestCode request, EActionCode action)
+        public ProtocolBytes(ERequestCode request, EActionCode action)
         {
             RequestCode = request;
             ActionCode = action;
@@ -50,19 +50,19 @@ namespace SakuraZeroCommon.Prorocal
         }
 
         /// <summary>
-        /// 解码，将字节流转换成ProtocalBytes对象.
+        /// 解码，将字节流转换成ProtocolBytes对象.
         /// </summary>
         /// <param name="readBuff"></param>
         /// <param name="start"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public override ProtocalBase Decode(byte[] readBuff, int start, int length)
+        public override ProtocolBase Decode(byte[] readBuff, int start, int length)
         {
-            ProtocalBytes protocal = new ProtocalBytes();
-            protocal.bytes = new byte[length];
-            Array.Copy(readBuff, start, protocal.bytes, 0, length);
-            protocal.Init();
-            return protocal;
+            ProtocolBytes protocol = new ProtocolBytes();
+            protocol.bytes = new byte[length];
+            Array.Copy(readBuff, start, protocol.bytes, 0, length);
+            protocol.Init();
+            return protocol;
         }
 
         /// <summary>
