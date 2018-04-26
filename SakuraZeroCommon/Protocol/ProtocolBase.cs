@@ -1,6 +1,6 @@
 ﻿using SakuraZeroCommon.Core;
 
-namespace SakuraZeroCommon.Prorocal
+namespace SakuraZeroCommon.Protocol
 {
     public class ProtocolBase
     {
@@ -17,9 +17,10 @@ namespace SakuraZeroCommon.Prorocal
             protected set;
         }
 
-        public ProtocolBase()
+        public virtual EReturnCode ReturnCode
         {
-
+            get;
+            protected set;
         }
 
         // 解码器，解码readbuff中从start开始的length字节
@@ -32,20 +33,6 @@ namespace SakuraZeroCommon.Prorocal
         public virtual byte[] Encode()
         {
             return new byte[] { };
-        }
-
-        /// <summary>
-        /// 一级协议名称，用于消息分发.
-        /// </summary>
-        /// <returns></returns>
-        public virtual string GetRequestName()
-        {
-            return "";
-        }
-
-        public virtual ERequestCode GetRequestCode()
-        {
-            return ERequestCode.None;
         }
 
         /// <summary>

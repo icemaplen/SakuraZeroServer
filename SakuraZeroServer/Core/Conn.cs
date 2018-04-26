@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SakuraZeroServer.Controller;
 using SakuraZeroServer.Tool;
+using SakuraZeroCommon.Protocol;
 
 namespace SakuraZeroServer.Core
 {
@@ -43,6 +44,22 @@ namespace SakuraZeroServer.Core
         public string GetAddress()
         {
             return isUse ? socket.RemoteEndPoint.ToString() : "无法获取地址";
+        }
+
+        public void Send(ProtocolBase protocol)
+        {
+            byte[] bytes = protocol.Encode();
+            byte[] length = BitConverter.GetBytes(bytes.Length);
+            byte[] sendBuff = length.Concat(bytes).ToArray();
+
+            try
+            {
+                socket.BeginSend(sendBuff, 0, sendBuff.Length, SocketFlags.None, null, null);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine($"[发送消息]{GetAddress()}:{ex.Message}");
+            }
         }
 
         public void Close()

@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Text;
 
-namespace SakuraZeroCommon.Prorocal
+namespace SakuraZeroCommon.Protocol
 {
     public class ProtocolBytes : ProtocolBase
     {
@@ -20,24 +20,34 @@ namespace SakuraZeroCommon.Prorocal
             protected set;
         }
 
+        public override EReturnCode ReturnCode
+        {
+            get;
+            protected set;
+        }
+
         public ProtocolBytes()
         {
             AddInt((int)ERequestCode.None);
             AddInt((int)EActionCode.None);
+            AddInt((int)EReturnCode.None);
         }
 
         /// <summary>
         /// 构造一个新的协议并初始化协议头部.
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="action"></param>
-        public ProtocolBytes(ERequestCode request, EActionCode action)
+        /// <param name="request">一级，类</param>
+        /// <param name="action">二级，方法</param>
+        /// <param name="returncode">返回值</param>
+        public ProtocolBytes(ERequestCode request, EActionCode action, EReturnCode returncode = EReturnCode.None)
         {
             RequestCode = request;
             ActionCode = action;
+            ReturnCode = returncode;
 
             AddInt((int)RequestCode);
             AddInt((int)ActionCode);
+            AddInt((int)ReturnCode);
         }
 
         /// <summary>
@@ -47,6 +57,7 @@ namespace SakuraZeroCommon.Prorocal
         {
             RequestCode = (ERequestCode)Enum.Parse(typeof(ERequestCode), GetInt(0).ToString());
             ActionCode = (EActionCode)Enum.Parse(typeof(EActionCode), GetInt(sizeof(int)).ToString());
+            ReturnCode = (EReturnCode)Enum.Parse(typeof(EReturnCode), GetInt(sizeof(int)*2).ToString());
         }
 
         /// <summary>

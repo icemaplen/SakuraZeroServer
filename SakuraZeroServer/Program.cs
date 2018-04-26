@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SakuraZeroCommon.Prorocal;
+using SakuraZeroCommon.Protocol;
 using SakuraZeroServer.Core;
 
 namespace SakuraZeroServer

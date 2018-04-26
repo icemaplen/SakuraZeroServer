@@ -6,9 +6,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using SakuraZeroServer.Tool;
-using SakuraZeroCommon.Prorocal;
+using SakuraZeroCommon.Protocol;
 using SakuraZeroCommon.Core;
+using SakuraZeroServer.Controller;
 
 namespace SakuraZeroServer.Core
 {
@@ -37,6 +37,8 @@ namespace SakuraZeroServer.Core
         public long heartBeatTime = 10;
         
         public ProtocolBase protocol;
+
+        private Dictionary<ERequestCode, BaseController> requestDict;
 
         /// <summary>
         /// 获得连接池索引.
@@ -67,6 +69,8 @@ namespace SakuraZeroServer.Core
 
         public void Start(string host, int port)
         {
+            InitRequestDict();
+
             // 定时器
             timer.Elapsed += new System.Timers.ElapsedEventHandler(HandleMainTimer);
             timer.AutoReset = false;
@@ -85,6 +89,12 @@ namespace SakuraZeroServer.Core
             Console.WriteLine("服务器启动成功...");
         }
 
+        private void InitRequestDict()
+        {
+            requestDict = new Dictionary<ERequestCode, BaseController>();
+            requestDict.Add(ERequestCode.User, new UserController());
+        }
+
         private void AcceptCallback(IAsyncResult ar)
         {
             try
@@ -101,7 +111,7 @@ namespace SakuraZeroServer.Core
                     Conn conn = conns[index];
                     conn.Init(socket);
                     string address = conn.GetAddress();
-                    Console.WriteLine($"客户端连接[{address}] conn池ID：{index}");
+                    Console.WriteLine($"客户端连接[{address}] --- Conn池ID：{index}");
                     conn.socket.BeginReceive(conn.readBuff, conn.buffCount, conn.BuffRemain, SocketFlags.None, ReceiveCallback, conn);
                     listenfd.BeginAccept(AcceptCallback, null);
                 }

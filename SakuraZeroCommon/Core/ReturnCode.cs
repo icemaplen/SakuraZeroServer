@@ -1,6 +1,6 @@
 ﻿namespace SakuraZeroCommon.Core
 {
-    public enum ReturnCode
+    public enum EReturnCode
     {
         None,
         Success,

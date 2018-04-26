@@ -47,8 +47,8 @@
     <Compile Include="Core\ReturnCode.cs" />
     <Compile Include="Property\PlayerJob.cs" />
     <Compile Include="Property\Sex.cs" />
-    <Compile Include="Protocal\ProtocolBase.cs" />
-    <Compile Include="Protocal\ProtocolBytes.cs" />
+    <Compile Include="Protocol\ProtocolBase.cs" />
+    <Compile Include="Protocol\ProtocolBytes.cs" />
     <Compile Include="Tool\Pos.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
