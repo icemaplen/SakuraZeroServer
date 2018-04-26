@@ -12,8 +12,6 @@ namespace SakuraZeroServer
     {
         static void Main(string[] args)
         {
-            //Console.WriteLine(DataManager.Instance.Register("123","123"));
-            //Console.WriteLine(DataManager.Instance.VerifyUser("123","123")?.Username);
             ServerNet serverNet = new ServerNet();
             serverNet.protocol = new ProtocolBytes();
             serverNet.Start("127.0.0.1", 12345);

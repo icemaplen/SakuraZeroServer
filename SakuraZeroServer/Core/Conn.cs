@@ -55,6 +55,7 @@ namespace SakuraZeroServer.Core
             try
             {
                 socket.BeginSend(sendBuff, 0, sendBuff.Length, SocketFlags.None, null, null);
+                Console.WriteLine($"已发送:{protocol.RequestCode}");
             }
             catch (System.Exception ex)
             {

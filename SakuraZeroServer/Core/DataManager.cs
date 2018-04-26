@@ -49,5 +49,6 @@ namespace SakuraZeroServer.Core
         {
             return userDao.VerifyUser(sqlConn, username, password);
         }
+        
     }
 }

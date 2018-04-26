@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Controller\BaseController.cs" />
     <Compile Include="Controller\PlayerController.cs" />
+    <Compile Include="Controller\SystemController.cs" />
     <Compile Include="Controller\UserController.cs" />
     <Compile Include="Core\Conn.cs" />
     <Compile Include="Core\DataManager.cs" />

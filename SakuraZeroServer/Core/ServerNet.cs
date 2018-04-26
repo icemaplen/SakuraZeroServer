@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using SakuraZeroCommon.Protocol;
 using SakuraZeroCommon.Core;
 using SakuraZeroServer.Controller;
+using System.Reflection;
 
 namespace SakuraZeroServer.Core
 {
@@ -93,6 +94,7 @@ namespace SakuraZeroServer.Core
         {
             requestDict = new Dictionary<ERequestCode, BaseController>();
             requestDict.Add(ERequestCode.User, new UserController());
+            requestDict.Add(ERequestCode.System, new SystemController());
         }
 
         private void AcceptCallback(IAsyncResult ar)
@@ -196,6 +198,11 @@ namespace SakuraZeroServer.Core
             ERequestCode requestCode = protocolBase.RequestCode;
             EActionCode actionCode = protocolBase.ActionCode;
             Console.WriteLine("收到协议:" + requestCode.ToString()+"---"+ actionCode.ToString());
+            BaseController controller;
+            requestDict.TryGetValue(requestCode, out controller);
+            MethodInfo method = controller.GetType().GetMethod(actionCode.ToString());
+            object[] objs = new object[] { conn, protocolBase };
+            method.Invoke(controller, objs);
             //if (requestCode == )
             //{
             //    Console.WriteLine("更新心跳时间"+conn.GetAddress());

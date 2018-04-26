@@ -10,13 +10,13 @@ namespace SakuraZeroServer.Model
     {
         public int ID { get; set; }
         public string Username { get; set; }
-        public string Password { get; set; }
+        //public string Password { get; set; }
 
-        public UserModel(int id, string username, string password)
+        public UserModel(int id, string username)
         {
             ID = id;
             Username = username;
-            Password = password;
+            //Password = password;
         }
     }
 }

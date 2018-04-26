@@ -20,7 +20,7 @@ namespace SakuraZeroServer.Controller
 
         public void Login(Conn conn, ProtocolBase proto)
         {
-            int start = sizeof(Int32) * 2;
+            int start = sizeof(Int32) * 3;
             ProtocolBytes p = proto as ProtocolBytes;
             string username = p.GetString(start, ref start);
             string password = p.GetString(start, ref start);

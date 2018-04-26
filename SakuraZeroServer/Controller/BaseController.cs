@@ -12,12 +12,6 @@ namespace SakuraZeroServer.Controller
     public class BaseController
     {
         protected ERequestCode requestCode;
-
-
-
-        public virtual void Send()
-        {
-
-        }
+        
     }
 }
