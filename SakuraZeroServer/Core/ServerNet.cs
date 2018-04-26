@@ -90,6 +90,9 @@ namespace SakuraZeroServer.Core
             Console.WriteLine("服务器启动成功...");
         }
 
+        /// <summary>
+        /// 初始化Request列表.
+        /// </summary>
         private void InitRequestDict()
         {
             requestDict = new Dictionary<ERequestCode, BaseController>();
@@ -113,7 +116,7 @@ namespace SakuraZeroServer.Core
                     Conn conn = conns[index];
                     conn.Init(socket);
                     string address = conn.GetAddress();
-                    Console.WriteLine($"客户端连接[{address}] --- Conn池ID：{index}");
+                    Console.WriteLine($"监听到客户端连接：[{address}] --- Conn池ID：{index}");
                     conn.socket.BeginReceive(conn.readBuff, conn.buffCount, conn.BuffRemain, SocketFlags.None, ReceiveCallback, conn);
                     listenfd.BeginAccept(AcceptCallback, null);
                 }
@@ -258,7 +261,7 @@ namespace SakuraZeroServer.Core
         public void HandleMainTimer(object sender, System.Timers.ElapsedEventArgs e)
         {
             // 处理心跳
-            //HeartBeat();
+            HeartBeat();
             timer.Start();
         }
 

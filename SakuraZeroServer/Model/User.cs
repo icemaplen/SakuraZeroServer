@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace SakuraZeroServer.Model
 {
-    public class UserModel
+    public class User
     {
         public int ID { get; set; }
         public string Username { get; set; }
         //public string Password { get; set; }
 
-        public UserModel(int id, string username)
+        public User(int id, string username)
         {
             ID = id;
             Username = username;

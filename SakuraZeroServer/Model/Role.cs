@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SakuraZeroServer.Model
 {
-    public class RoleModel
+    public class Role
     {
         public int ID { get; set; }
         public string Name { get; set; }

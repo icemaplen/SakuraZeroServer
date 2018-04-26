@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SakuraZeroServer.Controller
 {
-    class SystemController:BaseController
+    public class SystemController:BaseController
     {
         public SystemController()
         {
@@ -18,7 +18,7 @@ namespace SakuraZeroServer.Controller
 
         public void HeartBeat(Conn conn,ProtocolBase protocol)
         {
-
+            conn.lastTickTime = TimeStamp.GetTimeStamp();
         }
     }
 }

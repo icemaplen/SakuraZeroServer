@@ -24,15 +24,44 @@ namespace SakuraZeroServer.Controller
             ProtocolBytes p = proto as ProtocolBytes;
             string username = p.GetString(start, ref start);
             string password = p.GetString(start, ref start);
-            UserModel user = DataManager.Instance.VerifyUser(username, password);
-            EReturnCode returnCode = user == null ? EReturnCode.Failed : EReturnCode.Success;
-            p = new ProtocolBytes(requestCode, EActionCode.Login,returnCode);
-            conn.Send(p);
+            User user = dataMgr.VerifyUser(username, password);
+            ProtocolBytes result;
+            if (user != null)
+            {
+                // 登录成功，返回用户id和用户名
+                conn.user = user;
+                result = new ProtocolBytes(requestCode, EActionCode.Login, EReturnCode.Success);
+                result.AddInt(user.ID);
+                result.AddString(user.Username);
+
+            }
+            else
+            {
+                result = new ProtocolBytes(requestCode, EActionCode.Login, EReturnCode.Failed);
+            }
+
+            Send(conn, result);
         }
 
-        public void Regisger()
+        public void Regisger(Conn conn, ProtocolBase proto)
         {
-
+            int start = sizeof(Int32) * 3;
+            ProtocolBytes p = proto as ProtocolBytes;
+            string username = p.GetString(start, ref start);
+            ProtocolBytes result;
+            if (dataMgr.CanGetUser(username))
+            {
+                result = new ProtocolBytes(requestCode, EActionCode.Register, EReturnCode.RepeatName);
+            }
+            else
+            {
+                string password = p.GetString(start, ref start);
+                bool createResult = dataMgr.CreateUser(username, password);
+                // 有可能会创建失败，返回未知错误编号
+                EReturnCode returnCode = createResult ? EReturnCode.Success : EReturnCode.None;
+                result = new ProtocolBytes(requestCode, EActionCode.Register, returnCode);
+            }
+            Send(conn, result);
         }
     }
 }

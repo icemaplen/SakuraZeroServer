@@ -1,5 +1,8 @@
 ﻿namespace SakuraZeroCommon.Core
 {
+    /// <summary>
+    /// 二级协议名，Action，用于查找执行方法.
+    /// </summary>
     public enum EActionCode
     {
         None,
@@ -9,6 +12,10 @@
 
         // User
         Login,
-        Register
+        Register,
+
+        // Player
+        KickOff,
+        GetRoles
     }
 }

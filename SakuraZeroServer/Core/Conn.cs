@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using SakuraZeroServer.Controller;
 using SakuraZeroServer.Tool;
 using SakuraZeroCommon.Protocol;
+using SakuraZeroServer.Model;
 
 namespace SakuraZeroServer.Core
 {
@@ -20,7 +21,8 @@ namespace SakuraZeroServer.Core
         public byte[] lenBytes = new byte[sizeof(UInt32)];
         public Int32 msgLength = 0;
         public long lastTickTime = long.MinValue;   // 心跳时间
-        public PlayerController player;
+        public Player player;
+        public User user;
 
         public int BuffRemain
         {
@@ -48,19 +50,17 @@ namespace SakuraZeroServer.Core
 
         public void Send(ProtocolBase protocol)
         {
-            byte[] bytes = protocol.Encode();
-            byte[] length = BitConverter.GetBytes(bytes.Length);
-            byte[] sendBuff = length.Concat(bytes).ToArray();
+            ServerNet.Instance.Send(this, protocol);
+        }
 
-            try
-            {
-                socket.BeginSend(sendBuff, 0, sendBuff.Length, SocketFlags.None, null, null);
-                Console.WriteLine($"已发送:{protocol.RequestCode}");
-            }
-            catch (System.Exception ex)
-            {
-                Console.WriteLine($"[发送消息]{GetAddress()}:{ex.Message}");
-            }
+        /// <summary>
+        /// 下线
+        /// </summary>
+        public void Logout()
+        {
+            DataManager.Instance.SavaPlayer(player);
+            player = null;
+            Close(); 
         }
 
         public void Close()
@@ -69,7 +69,8 @@ namespace SakuraZeroServer.Core
             {
                 if (player != null)
                 {
-                    // TODO 玩家退出处理
+                    // 玩家退出处理
+                    Logout();
                 }
                 Console.WriteLine("[断开连接]" + GetAddress());
                 socket.Close();

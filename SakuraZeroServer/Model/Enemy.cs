@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SakuraZeroServer.Model
 {
-    public class EnemyModel:RoleModel
+    public class Enemy:Role
     {
     }
 }

@@ -40,15 +40,41 @@ namespace SakuraZeroServer.Core
             userDao = new UserDAO();
         }
 
-        public bool Register(string username, string password)
+        /// <summary>
+        /// 匹配用户名和密码，登录时调用
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public User VerifyUser(string username, string password)
+        {
+            return userDao.VerifyUser(sqlConn, username, password);
+        }
+
+        /// <summary>
+        /// 查询用户名是否存在，注册时调用
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public bool CanGetUser(string username)
+        {
+            return userDao.GetUserByUsername(sqlConn, username);
+        }
+
+        /// <summary>
+        /// 创建新用户
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public bool CreateUser(string username, string password)
         {
             return userDao.AddUser(sqlConn, username, password);
         }
 
-        public UserModel VerifyUser(string username, string password)
+        public bool SavaPlayer(Player player)
         {
-            return userDao.VerifyUser(sqlConn, username, password);
+            return true;
         }
-        
     }
 }

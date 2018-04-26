@@ -5,6 +5,9 @@ using System.Text;
 
 namespace SakuraZeroCommon.Protocol
 {
+    /// <summary>
+    /// 基于字节流的协议.
+    /// </summary>
     public class ProtocolBytes : ProtocolBase
     {
         public byte[] bytes;        //传输的字节流
@@ -38,7 +41,7 @@ namespace SakuraZeroCommon.Protocol
         /// </summary>
         /// <param name="request">一级，类</param>
         /// <param name="action">二级，方法</param>
-        /// <param name="returncode">返回值</param>
+        /// <param name="returncode">三级，返回值</param>
         public ProtocolBytes(ERequestCode request, EActionCode action, EReturnCode returncode = EReturnCode.None)
         {
             RequestCode = request;
