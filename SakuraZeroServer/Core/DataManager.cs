@@ -7,6 +7,7 @@ using MySql.Data.MySqlClient;
 using SakuraZeroServer.Tool;
 using SakuraZeroServer.Model;
 using SakuraZeroServer.DAO;
+using SakuraZeroCommon.Property;
 
 namespace SakuraZeroServer.Core
 {
@@ -33,11 +34,13 @@ namespace SakuraZeroServer.Core
 
         private MySqlConnection sqlConn;
         private UserDAO userDao;
+        private PlayerDAO playerDAO;
 
         public DataManager()
         {
             sqlConn = SqlConnHelper.Connect();
-            userDao = new UserDAO();
+            userDao = new UserDAO(sqlConn);
+            playerDAO = new PlayerDAO(sqlConn);
         }
 
         /// <summary>
@@ -48,7 +51,7 @@ namespace SakuraZeroServer.Core
         /// <returns></returns>
         public User VerifyUser(string username, string password)
         {
-            return userDao.VerifyUser(sqlConn, username, password);
+            return userDao.VerifyUser(username, password);
         }
 
         /// <summary>
@@ -58,7 +61,7 @@ namespace SakuraZeroServer.Core
         /// <returns></returns>
         public bool CanGetUser(string username)
         {
-            return userDao.GetUserByUsername(sqlConn, username);
+            return userDao.GetUserByUsername(username);
         }
 
         /// <summary>
@@ -69,12 +72,37 @@ namespace SakuraZeroServer.Core
         /// <returns></returns>
         public bool CreateUser(string username, string password)
         {
-            return userDao.AddUser(sqlConn, username, password);
+            return userDao.AddUser(username, password);
+        }
+
+        public Player GetPlayer(int playerid)
+        {
+            return playerDAO.GetPlayer(playerid);
+        }
+
+        public List<Player> GetPlayers(int userid)
+        {
+            return playerDAO.GetPlayers(userid);
+        }
+
+        public bool CreateRole(int userid,string name,EPlayerJob job)
+        {
+            return playerDAO.CreatePlayer(userid, name, job);
+        }
+
+        public int GetPlayerIDByName(string name)
+        {
+            return playerDAO.GetPlayerIDByName(name);
         }
 
         public bool SavaPlayer(Player player)
         {
-            return true;
+            return playerDAO.SavePlayer(player);
+        }
+
+        public bool SavePlayerPos(Player player)
+        {
+            return playerDAO.SavePlayerPos(player);
         }
     }
 }

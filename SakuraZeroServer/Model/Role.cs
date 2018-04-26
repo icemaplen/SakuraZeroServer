@@ -18,7 +18,7 @@ namespace SakuraZeroServer.Model
         public int HP { get; set; }
         public int MP { get; set; }
         public int MapNum { get; set; }
-        public Pos pos { get; set; }
+        public Pos Pos { get; set; }
         public int Attack { get; set; }
         public float HitRate { get; set; }      // 命中率
         public float Puncture { get; set; }     // 穿刺

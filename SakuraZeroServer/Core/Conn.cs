@@ -75,6 +75,7 @@ namespace SakuraZeroServer.Core
                 Console.WriteLine("[断开连接]" + GetAddress());
                 socket.Close();
                 isUse = false;
+                user = null;
             }
         }
     }

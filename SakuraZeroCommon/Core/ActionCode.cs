@@ -16,6 +16,7 @@
 
         // Player
         KickOff,
-        GetRoles
+        GetRoles,
+        CreateRole
     }
 }

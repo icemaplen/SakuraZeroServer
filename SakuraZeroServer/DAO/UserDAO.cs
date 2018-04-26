@@ -11,12 +11,19 @@ namespace SakuraZeroServer.DAO
 {
     public class UserDAO
     {
-        public User VerifyUser(MySqlConnection conn, string username, string password)
+        private MySqlConnection sqlConn;
+
+        public UserDAO(MySqlConnection conn)
+        {
+            sqlConn = conn;
+        }
+
+        public User VerifyUser(string username, string password)
         {
             MySqlDataReader reader = null;
             try
             {
-                MySqlCommand cmd = new MySqlCommand("select * from user where username = @username and password = @password", conn);
+                MySqlCommand cmd = new MySqlCommand("select * from user where username = @username and password = @password", sqlConn);
                 cmd.Parameters.AddWithValue("@username", username);
                 cmd.Parameters.AddWithValue("@password", MD5Hash.GetHashCode(password));
                 reader = cmd.ExecuteReader();
@@ -44,12 +51,12 @@ namespace SakuraZeroServer.DAO
             return null;
         }
 
-        public bool GetUserByUsername(MySqlConnection conn, string username)
+        public bool GetUserByUsername(string username)
         {
             MySqlDataReader reader = null;
             try
             {
-                MySqlCommand cmd = new MySqlCommand("select * from user where username = @username", conn);
+                MySqlCommand cmd = new MySqlCommand("select * from user where username = @username", sqlConn);
                 cmd.Parameters.AddWithValue("@username", username);
                 reader = cmd.ExecuteReader();
                 if (reader.HasRows)
@@ -72,11 +79,11 @@ namespace SakuraZeroServer.DAO
             return false;
         }
 
-        public bool AddUser(MySqlConnection conn, string username, string password)
+        public bool AddUser(string username, string password)
         {
             try
             {
-                MySqlCommand cmd = new MySqlCommand("insert into user set username = @username , password = @password", conn);
+                MySqlCommand cmd = new MySqlCommand("insert into user set username = @username , password = @password", sqlConn);
                 cmd.Parameters.AddWithValue("@username", username);
                 cmd.Parameters.AddWithValue("@password", MD5Hash.GetHashCode(password));
                 cmd.ExecuteNonQuery();
