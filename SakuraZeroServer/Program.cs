@@ -10,11 +10,14 @@ namespace SakuraZeroServer
 {
     class Program
     {
+        private static string IP = "127.0.0.1";
+        private static int PORT = 12345;
+
         static void Main(string[] args)
         {
             ServerNet serverNet = new ServerNet();
             serverNet.protocol = new ProtocolBytes();
-            serverNet.Start("127.0.0.1", 12345);
+            serverNet.Start(IP, PORT);
 
 
             Console.ReadKey();

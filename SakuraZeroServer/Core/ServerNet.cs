@@ -30,15 +30,13 @@ namespace SakuraZeroServer.Core
         }
         #endregion
 
-        public Socket listenfd;
+        public Socket serverCocket;
         public Conn[] conns;
         public int maxConnCount = 50;       //最大连接数
+        public ProtocolBase protocol;
 
         private System.Timers.Timer timer = new System.Timers.Timer(1000);      // 主定时器
         public long heartBeatTime = 10;
-        
-        public ProtocolBase protocol;
-
         private Dictionary<ERequestCode, BaseController> requestDict;
 
         /// <summary>
@@ -83,10 +81,10 @@ namespace SakuraZeroServer.Core
                 conns[i] = new Conn();
             }
 
-            listenfd = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            listenfd.Bind(new IPEndPoint(IPAddress.Parse(host), port));
-            listenfd.Listen(maxConnCount);
-            listenfd.BeginAccept(AcceptCallback, null);
+            serverCocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            serverCocket.Bind(new IPEndPoint(IPAddress.Parse(host), port));
+            serverCocket.Listen(maxConnCount);
+            serverCocket.BeginAccept(AcceptCallback, null);
             Console.WriteLine("服务器启动成功...");
         }
 
@@ -100,11 +98,15 @@ namespace SakuraZeroServer.Core
             requestDict.Add(ERequestCode.System, new SystemController());
         }
 
+        /// <summary>
+        /// 接收连接的回调方法
+        /// </summary>
+        /// <param name="ar"></param>
         private void AcceptCallback(IAsyncResult ar)
         {
             try
             {
-                Socket socket = listenfd.EndAccept(ar);
+                Socket socket = serverCocket.EndAccept(ar);
                 int index = NewIndex();
                 if (index < 0)
                 {
@@ -118,7 +120,7 @@ namespace SakuraZeroServer.Core
                     string address = conn.GetAddress();
                     Console.WriteLine($"监听到客户端连接：[{address}] --- Conn池ID：{index}");
                     conn.socket.BeginReceive(conn.readBuff, conn.buffCount, conn.BuffRemain, SocketFlags.None, ReceiveCallback, conn);
-                    listenfd.BeginAccept(AcceptCallback, null);
+                    serverCocket.BeginAccept(AcceptCallback, null);
                 }
             }
             catch (System.Exception ex)
@@ -127,9 +129,13 @@ namespace SakuraZeroServer.Core
             }
         }
 
+        /// <summary>
+        /// 接收消息的回调方法
+        /// </summary>
+        /// <param name="ar"></param>
         private void ReceiveCallback(IAsyncResult ar)
         {
-            Conn conn = ar.AsyncState as Conn;
+            Conn conn = ar.AsyncState as Conn; 
             try
             {
                 int count = conn.socket.EndReceive(ar);
@@ -166,6 +172,10 @@ namespace SakuraZeroServer.Core
             }
         }
 
+        /// <summary>
+        /// 粘包消息处理.
+        /// </summary>
+        /// <param name="conn"></param>
         private void ProcessData(Conn conn)
         {
             if (conn.buffCount < sizeof(Int32))
@@ -196,27 +206,36 @@ namespace SakuraZeroServer.Core
             }
         }
 
+        /// <summary>
+        /// 消息分发
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <param name="protocolBase"></param>
         private void HandleMsg(Conn conn, ProtocolBase protocolBase)
         {
             ERequestCode requestCode = protocolBase.RequestCode;
             EActionCode actionCode = protocolBase.ActionCode;
-            Console.WriteLine("收到协议:" + requestCode.ToString()+"---"+ actionCode.ToString());
+            Console.WriteLine($"收到来自[{conn.GetAddress()}]协议:[{ requestCode.ToString()}---{actionCode.ToString()}]");
             BaseController controller;
             requestDict.TryGetValue(requestCode, out controller);
             MethodInfo method = controller.GetType().GetMethod(actionCode.ToString());
+            if (method == null)
+            {
+                Console.WriteLine("【警告】未找到Action方法："+actionCode.ToString());
+                return;
+            }
             object[] objs = new object[] { conn, protocolBase };
             method.Invoke(controller, objs);
-            //if (requestCode == )
-            //{
-            //    Console.WriteLine("更新心跳时间"+conn.GetAddress());
-            //    conn.lastTickTime = TimeStamp.GetTimeStamp();
-            //}
 
             // 回射
             //Send(conn, protocolBase);
         }
 
-
+        /// <summary>
+        /// 向客户端发送消息
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <param name="protocol"></param>
         public void Send(Conn conn, ProtocolBase protocol)
         {
             byte[] bytes = protocol.Encode();
@@ -233,6 +252,10 @@ namespace SakuraZeroServer.Core
             }
         }
 
+        /// <summary>
+        /// 消息广播
+        /// </summary>
+        /// <param name="protocol"></param>
         public void Broadcast(ProtocolBase protocol)
         {
             foreach (Conn c in conns)
@@ -258,14 +281,14 @@ namespace SakuraZeroServer.Core
             }
         }
 
-        public void HandleMainTimer(object sender, System.Timers.ElapsedEventArgs e)
+        private void HandleMainTimer(object sender, System.Timers.ElapsedEventArgs e)
         {
             // 处理心跳
-            HeartBeat();
+            //HeartBeat();
             timer.Start();
         }
 
-        public void HeartBeat()
+        private void HeartBeat()
         {
             Console.WriteLine("主定时器执行");
             long timeNow = TimeStamp.GetTimeStamp();

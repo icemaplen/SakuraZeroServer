@@ -29,8 +29,6 @@ namespace SakuraZeroServer.DAO
                 reader = cmd.ExecuteReader();
                 if (reader.Read())
                 {
-                    Console.WriteLine(reader.GetString("username"));
-                    Console.WriteLine(reader.GetString("password"));
                     int id = reader.GetInt32("id");
                     User user = new User(id, username);
                     return user;

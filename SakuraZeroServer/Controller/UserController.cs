@@ -43,7 +43,7 @@ namespace SakuraZeroServer.Controller
             Send(conn, result);
         }
 
-        public void Regisger(Conn conn, ProtocolBase proto)
+        public void Register(Conn conn, ProtocolBase proto)
         {
             int start = sizeof(Int32) * 3;
             ProtocolBytes p = proto as ProtocolBytes;
