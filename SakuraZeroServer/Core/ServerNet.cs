@@ -96,6 +96,8 @@ namespace SakuraZeroServer.Core
             requestDict = new Dictionary<ERequestCode, BaseController>();
             requestDict.Add(ERequestCode.User, new UserController());
             requestDict.Add(ERequestCode.System, new SystemController());
+
+            // TODO
         }
 
         /// <summary>

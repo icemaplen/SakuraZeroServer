@@ -53,16 +53,6 @@ namespace SakuraZeroServer.Core
             ServerNet.Instance.Send(this, protocol);
         }
 
-        /// <summary>
-        /// 下线
-        /// </summary>
-        public void Logout()
-        {
-            DataManager.Instance.SavaPlayer(player);
-            player = null;
-            Close(); 
-        }
-
         public void Close()
         {
             if (isUse)
@@ -70,12 +60,13 @@ namespace SakuraZeroServer.Core
                 if (player != null)
                 {
                     // 玩家退出处理
-                    Logout();
+                    DataManager.Instance.SavaPlayer(player);
                 }
                 Console.WriteLine("[断开连接]" + GetAddress());
                 socket.Close();
                 isUse = false;
                 user = null;
+                player = null;
             }
         }
     }

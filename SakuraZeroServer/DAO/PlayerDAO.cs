@@ -71,7 +71,7 @@ namespace SakuraZeroServer.DAO
             }
             catch (Exception e)
             {
-                Console.WriteLine("在创建角色的时候出现异常：" + e);
+                Console.WriteLine("在 GetPlayerIDByName(string name) 出现异常：\n" + e);
             }
             finally
             {
@@ -109,7 +109,7 @@ namespace SakuraZeroServer.DAO
             }
             catch (Exception e)
             {
-                Console.WriteLine("在创建角色的时候出现异常：" + e);
+                Console.WriteLine("在 GetPlayer(int playerid) 出现异常：\n" + e);
             }
             finally
             {
@@ -145,7 +145,7 @@ namespace SakuraZeroServer.DAO
             }
             catch (Exception e)
             {
-                Console.WriteLine("在创建角色的时候出现异常：" + e);
+                Console.WriteLine("在 GetPlayers(int userid) 出现异常：\n" + e);
             }
             finally
             {
@@ -171,7 +171,7 @@ namespace SakuraZeroServer.DAO
             }
             catch (Exception e)
             {
-                Console.WriteLine("在保存角色信息的时候出现异常：" + e);
+                Console.WriteLine("在 SavePlayer(Player player) 出现异常：\n" + e);
                 return false;
             }
         }
@@ -189,7 +189,7 @@ namespace SakuraZeroServer.DAO
             }
             catch (Exception e)
             {
-                Console.WriteLine("在保存角色位置的时候出现异常：" + e);
+                Console.WriteLine("在 SavePlayerPos(Player player) 出现异常：\n" + e);
                 return false;
             }
         }

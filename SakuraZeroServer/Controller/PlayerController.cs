@@ -19,25 +19,8 @@ namespace SakuraZeroServer.Controller
             requestCode = ERequestCode.Player;
         }
 
-        public void KickOff(int id)
-        {
-            foreach (Conn c in ServerNet.Instance.conns)
-            {
-                if (c != null && c.isUse && c.player != null && c.player.ID == id)
-                {
-                    lock (c.player)
-                    {
-                        ProtocolBytes p = new ProtocolBytes(requestCode, EActionCode.KickOff, EReturnCode.None);
-                        Send(c, p);
-                        c.player.Logout();
-                    }
-                }
-            }
-        }
-
         public void GetRoles(Conn conn, ProtocolBase protocol)
         {
-            int start = sizeof(Int32) * 3;
             ProtocolBytes result;
             List<Player> playerList = dataMgr.GetPlayers(conn.user.ID);
             if (playerList != null)
@@ -78,19 +61,46 @@ namespace SakuraZeroServer.Controller
             }
             else
             {
-                result = new ProtocolBytes(requestCode, EActionCode.CreateRole, EReturnCode.Success);
+                result = new ProtocolBytes(requestCode, EActionCode.CreateRole, EReturnCode.Failed);
             }
             Send(conn, result);
         }
 
         /// <summary>
-        /// 角色登录
+        /// 角色上线
         /// </summary>
         /// <param name="conn"></param>
         /// <param name="protocol"></param>
         public void Login(Conn conn, ProtocolBase protocol)
         {
+            int start = sizeof(Int32) * 3;
+            ProtocolBytes p = protocol as ProtocolBytes;
+            int playerid = p.GetInt(start);
+            Player player = dataMgr.GetPlayer(playerid);
+            ProtocolBytes result;
+            if (player.UserID != conn.user.ID)
+            {
+                Console.WriteLine($"【警告】Player[{player.UserID}]不属于User[{conn.user.ID}]");
+                result = new ProtocolBytes(requestCode, EActionCode.Login, EReturnCode.Failed);
+            }
+            else
+            {
+                conn.player = player;
+                result = new ProtocolBytes(requestCode, EActionCode.Login, EReturnCode.Success);
+            }
+            Send(conn, result);
+        }
 
+        /// <summary>
+        /// 下线
+        /// </summary>
+        public void Logout(Conn conn, ProtocolBase protocol)
+        {
+            dataMgr.SavaPlayer(conn.player);
+            conn.player = null;
+
+            ProtocolBytes result= new ProtocolBytes(requestCode, EActionCode.Logout, EReturnCode.Success);
+            Send(conn, result);
         }
     }
 }

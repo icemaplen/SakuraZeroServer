@@ -28,6 +28,7 @@ namespace SakuraZeroServer.Controller
             ProtocolBytes result;
             if (user != null)
             {
+                KickOffSameUser(user.ID)
                 // 登录成功，返回用户id和用户名
                 conn.user = user;
                 result = new ProtocolBytes(requestCode, EActionCode.Login, EReturnCode.Success);
@@ -63,5 +64,39 @@ namespace SakuraZeroServer.Controller
             }
             Send(conn, result);
         }
+
+        /// <summary>
+        /// User下线操作
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <param name="protocol"></param>
+        public void Logout(Conn conn, ProtocolBase protocol)
+        {
+            conn.Close();
+
+            ProtocolBytes result = new ProtocolBytes(requestCode, EActionCode.Logout, EReturnCode.Success);
+            Send(conn, result);
+        }
+
+        /// <summary>
+        /// 如果该User已登录，将其踢下线
+        /// </summary>
+        /// <param name="userid"></param>
+        public void KickOffSameUser(int userid)
+        {
+            foreach (Conn c in ServerNet.Instance.conns)
+            {
+                if (c != null && c.isUse && c.user != null && c.user.ID == userid)
+                {
+                    lock (c.user)
+                    {
+                        ProtocolBytes p = new ProtocolBytes(requestCode, EActionCode.KickOff, EReturnCode.None);
+                        Send(c, p);
+                        c.Close();
+                    }
+                }
+            }
+        }
+
     }
 }

@@ -13,10 +13,11 @@
         // User
         Login,
         Register,
+        KickOff,
 
         // Player
-        KickOff,
         GetRoles,
-        CreateRole
+        CreateRole,
+        Logout
     }
 }

@@ -40,7 +40,7 @@ namespace SakuraZeroServer.DAO
             }
             catch (Exception e)
             {
-                Console.WriteLine("在VerifyUser的时候出现异常：" + e);
+                Console.WriteLine("在VerifyUser的时候出现异常：\n" + e);
             }
             finally
             {
@@ -68,7 +68,7 @@ namespace SakuraZeroServer.DAO
             }
             catch (Exception e)
             {
-                Console.WriteLine("在GetUserByUsername的时候出现异常：" + e);
+                Console.WriteLine("在GetUserByUsername的时候出现异常：\n" + e);
             }
             finally
             {
@@ -89,7 +89,7 @@ namespace SakuraZeroServer.DAO
             }
             catch (Exception e)
             {
-                Console.WriteLine("在AddUser的时候出现异常：" + e);
+                Console.WriteLine("在AddUser的时候出现异常：\n" + e);
                 return false;
             }
         }
