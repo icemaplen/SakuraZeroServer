@@ -18,7 +18,7 @@ namespace SakuraZeroServer.Controller
             requestCode = ERequestCode.User;
         }
 
-        public void Login(Conn conn, ProtocolBase proto)
+        public void UserLogin(Conn conn, ProtocolBase proto)
         {
             int start = sizeof(Int32) * 3;
             ProtocolBytes p = proto as ProtocolBytes;

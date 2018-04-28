@@ -71,7 +71,7 @@ namespace SakuraZeroServer.Controller
         /// </summary>
         /// <param name="conn"></param>
         /// <param name="protocol"></param>
-        public void Login(Conn conn, ProtocolBase protocol)
+        public void PlayerLogin(Conn conn, ProtocolBase protocol)
         {
             int start = sizeof(Int32) * 3;
             ProtocolBytes p = protocol as ProtocolBytes;
@@ -94,7 +94,7 @@ namespace SakuraZeroServer.Controller
         /// <summary>
         /// 下线
         /// </summary>
-        public void Logout(Conn conn, ProtocolBase protocol)
+        public void PlayerLogout(Conn conn, ProtocolBase protocol)
         {
             dataMgr.SavaPlayer(conn.player);
             conn.player = null;

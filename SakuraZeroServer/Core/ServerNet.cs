@@ -15,20 +15,7 @@ namespace SakuraZeroServer.Core
 {
     public class ServerNet
     {
-        #region 单例模式
-        private static ServerNet instance;
-        public static ServerNet Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new ServerNet();
-                }
-                return instance;
-            }
-        }
-        #endregion
+        public static ServerNet Instance;
 
         public Socket serverCocket;
         public Conn[] conns;
@@ -38,6 +25,12 @@ namespace SakuraZeroServer.Core
         private System.Timers.Timer timer = new System.Timers.Timer(1000);      // 主定时器
         public long heartBeatTime = 10;
         private Dictionary<ERequestCode, BaseController> requestDict;
+
+
+        public ServerNet()
+        {
+            Instance = this;
+        }
 
         /// <summary>
         /// 获得连接池索引.
@@ -286,13 +279,12 @@ namespace SakuraZeroServer.Core
         private void HandleMainTimer(object sender, System.Timers.ElapsedEventArgs e)
         {
             // 处理心跳
-            //HeartBeat();
+            HeartBeat();
             timer.Start();
         }
 
         private void HeartBeat()
         {
-            Console.WriteLine("主定时器执行");
             long timeNow = TimeStamp.GetTimeStamp();
             foreach (Conn c in conns)
             {
