@@ -9,7 +9,7 @@ namespace SakuraZeroServer.Tool
 {
     public static class SqlConnHelper
     {
-        public const string CONNECTION_STRING = "server=119.28.54.205; port=3306; database=sakurazero; uid=root; pwd=12345679; charset=utf8";
+        public const string CONNECTION_STRING = "server=119.28.54.205; port=3306; database=sakurazero; uid=sakura; pwd=12345670; charset=utf8";
 
         public static MySqlConnection Connect()
         {
