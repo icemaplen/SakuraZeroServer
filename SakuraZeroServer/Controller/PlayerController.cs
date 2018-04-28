@@ -81,12 +81,12 @@ namespace SakuraZeroServer.Controller
             if (player.UserID != conn.user.ID)
             {
                 Console.WriteLine($"【警告】Player[{player.UserID}]不属于User[{conn.user.ID}]");
-                result = new ProtocolBytes(requestCode, EActionCode.Login, EReturnCode.Failed);
+                result = new ProtocolBytes(requestCode, EActionCode.PlayerLogin, EReturnCode.Failed);
             }
             else
             {
                 conn.player = player;
-                result = new ProtocolBytes(requestCode, EActionCode.Login, EReturnCode.Success);
+                result = new ProtocolBytes(requestCode, EActionCode.PlayerLogin, EReturnCode.Success);
             }
             Send(conn, result);
         }
@@ -99,7 +99,7 @@ namespace SakuraZeroServer.Controller
             dataMgr.SavaPlayer(conn.player);
             conn.player = null;
 
-            ProtocolBytes result= new ProtocolBytes(requestCode, EActionCode.Logout, EReturnCode.Success);
+            ProtocolBytes result= new ProtocolBytes(requestCode, EActionCode.PlayerLogout, EReturnCode.Success);
             Send(conn, result);
         }
     }

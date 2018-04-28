@@ -28,17 +28,17 @@ namespace SakuraZeroServer.Controller
             ProtocolBytes result;
             if (user != null)
             {
-                KickOffSameUser(user.ID)
+                KickOffSameUser(user.ID);
                 // 登录成功，返回用户id和用户名
                 conn.user = user;
-                result = new ProtocolBytes(requestCode, EActionCode.Login, EReturnCode.Success);
+                result = new ProtocolBytes(requestCode, EActionCode.UserLogin, EReturnCode.Success);
                 result.AddInt(user.ID);
                 result.AddString(user.Username);
 
             }
             else
             {
-                result = new ProtocolBytes(requestCode, EActionCode.Login, EReturnCode.Failed);
+                result = new ProtocolBytes(requestCode, EActionCode.UserLogin, EReturnCode.Failed);
             }
 
             Send(conn, result);
@@ -74,7 +74,7 @@ namespace SakuraZeroServer.Controller
         {
             conn.Close();
 
-            ProtocolBytes result = new ProtocolBytes(requestCode, EActionCode.Logout, EReturnCode.Success);
+            ProtocolBytes result = new ProtocolBytes(requestCode, EActionCode.UserLogout, EReturnCode.Success);
             Send(conn, result);
         }
 

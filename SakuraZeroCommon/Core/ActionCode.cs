@@ -11,13 +11,15 @@
         HeartBeat,
 
         // User
-        Login,
+        UserLogin,
+        UserLogout,
         Register,
         KickOff,
 
         // Player
+        PlayerLogin,
+        PlayerLogout,
         GetRoles,
-        CreateRole,
-        Logout
+        CreateRole
     }
 }
