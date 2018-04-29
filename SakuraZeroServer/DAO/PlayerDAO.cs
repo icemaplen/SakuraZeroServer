@@ -120,7 +120,7 @@ namespace SakuraZeroServer.DAO
 
         public List<Player> GetPlayers(int userid)
         {
-            List<Player> playerList = null;
+            List<Player> playerList = new List<Player>();
             MySqlDataReader reader = null;
             try
             {

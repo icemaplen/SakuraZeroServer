@@ -89,6 +89,7 @@ namespace SakuraZeroServer.Core
             requestDict = new Dictionary<ERequestCode, BaseController>();
             requestDict.Add(ERequestCode.User, new UserController());
             requestDict.Add(ERequestCode.System, new SystemController());
+            requestDict.Add(ERequestCode.Player, new PlayerController());
 
             // TODO
         }
@@ -142,27 +143,12 @@ namespace SakuraZeroServer.Core
                 }
 
                 conn.buffCount += count;
-                //string str = Encoding.UTF8.GetString(conn.readBuff, 0, count);
-                //Console.WriteLine($"收到[{conn.GetAddress()}]的数据：{str}");
-
                 ProcessData(conn);
-                //str = $"{conn.GetAddress()}:{str}";
-                //byte[] bytes = Encoding.UTF8.GetBytes(str);
-                //for (int i = 0; i < conns.Length; i++)
-                //{
-                //    if (conns[i] == null || conns[i].isUse == false || conns[i] == conn)
-                //    {
-                //        continue;
-                //    }
-                //    Console.WriteLine("将消息传播给 " + conns[i].GetAddress());
-                //    conns[i].socket.Send(bytes);
-                //}
-
                 conn.socket.BeginReceive(conn.readBuff, conn.buffCount, conn.BuffRemain, SocketFlags.None, ReceiveCallback, conn);
             }
             catch (System.Exception ex)
             {
-                Console.WriteLine($"收到[{conn.GetAddress()}]断开连接:" + ex);
+                Console.WriteLine($"[{conn.GetAddress()}]断开连接:" + ex);
                 conn.Close();
             }
         }
@@ -186,11 +172,8 @@ namespace SakuraZeroServer.Core
             }
 
             // 处理消息
-            //string str = Encoding.UTF8.GetString(conn.readBuff, sizeof(Int32), conn.msgLength);
-            //Console.WriteLine($"收到来自[{conn.GetAddress()}]的消息{str}");
             ProtocolBase proto = protocol.Decode(conn.readBuff, sizeof(Int32), conn.msgLength);
             HandleMsg(conn, proto);
-            // Send(conn,str);
             // 清除已处理的消息
             int count = conn.buffCount - conn.msgLength - sizeof(Int32);
             Array.Copy(conn.readBuff, sizeof(Int32) + conn.msgLength, conn.readBuff, 0, count);
@@ -212,11 +195,15 @@ namespace SakuraZeroServer.Core
             EActionCode actionCode = protocolBase.ActionCode;
             Console.WriteLine($"收到来自[{conn.GetAddress()}]协议:[{ requestCode.ToString()}---{actionCode.ToString()}]");
             BaseController controller;
-            requestDict.TryGetValue(requestCode, out controller);
+            if (!requestDict.TryGetValue(requestCode, out controller))
+            {
+                Console.WriteLine($"【警告】未找到Request:{requestCode.ToString()}对应的方法");
+                return;
+            }
             MethodInfo method = controller.GetType().GetMethod(actionCode.ToString());
             if (method == null)
             {
-                Console.WriteLine("【警告】未找到Action方法："+actionCode.ToString());
+                Console.WriteLine($"【警告】未找到Action:{actionCode.ToString()}对应的方法");
                 return;
             }
             object[] objs = new object[] { conn, protocolBase };

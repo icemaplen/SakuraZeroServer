@@ -26,6 +26,7 @@ namespace SakuraZeroServer.Controller
             if (playerList != null)
             {
                 result = new ProtocolBytes(requestCode, EActionCode.GetRoles, EReturnCode.Success);
+                result.AddInt(playerList.Count);
                 foreach (Player p in playerList)
                 {
                     result.AddString(p.ToString());
