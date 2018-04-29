@@ -45,6 +45,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\RequestCode.cs" />
     <Compile Include="Core\ReturnCode.cs" />
+    <Compile Include="Property\Character.cs" />
     <Compile Include="Property\PlayerJob.cs" />
     <Compile Include="Property\Sex.cs" />
     <Compile Include="Protocol\ProtocolBase.cs" />

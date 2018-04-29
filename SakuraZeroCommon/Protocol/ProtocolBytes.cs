@@ -140,15 +140,17 @@ namespace SakuraZeroCommon.Protocol
 
         public void AddString(string str)
         {
-            Int32 len = str.Length;
-            byte[] lenBytes = BitConverter.GetBytes(len);
             byte[] strBytes = Encoding.UTF8.GetBytes(str);
+            Int32 len = strBytes.Length;
+            byte[] lenBytes = BitConverter.GetBytes(len);
+            int start = 0;
             if (bytes == null)
             {
                 bytes = lenBytes.Concat(strBytes).ToArray();
             }
             else
             {
+                start = bytes.Length;
                 bytes = bytes.Concat(lenBytes).Concat(strBytes).ToArray();
             }
         }

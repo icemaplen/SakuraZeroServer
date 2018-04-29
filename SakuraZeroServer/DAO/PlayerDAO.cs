@@ -94,12 +94,16 @@ namespace SakuraZeroServer.DAO
                     int userid = reader.GetInt32("userid");
                     ESex sex = (ESex)Enum.Parse(typeof(ESex), reader.GetInt32("sex").ToString());
                     EPlayerJob job = (EPlayerJob)Enum.Parse(typeof(EPlayerJob), reader.GetInt32("playerjob").ToString());
+                    ECharacter character = (ECharacter)Enum.Parse(typeof(ECharacter), reader.GetInt32("character").ToString());
                     int gold = reader.GetInt32("gold");
                     int level = reader.GetInt32("level");
                     int exp = reader.GetInt32("exp");
                     int mapNum = reader.GetInt32("mapnum");
-                    Pos pos = new Pos(reader.GetString("pos"));
-                    Player player = new Player(playerid, name, userid, sex, job, gold, level, exp, mapNum, pos);
+                    float posx = reader.GetFloat("posx");
+                    float posy = reader.GetFloat("posy");
+                    float posz = reader.GetFloat("posz");
+                    Pos pos = new Pos(posx, posy, posz);
+                    Player player = new Player(playerid, name, userid, sex, job, character, gold, level, exp, mapNum, pos);
                     return player;
                 }
                 else
@@ -133,12 +137,16 @@ namespace SakuraZeroServer.DAO
                     string name = reader.GetString("name");
                     ESex sex = (ESex)Enum.Parse(typeof(ESex), reader.GetInt32("sex").ToString());
                     EPlayerJob job = (EPlayerJob)Enum.Parse(typeof(EPlayerJob), reader.GetInt32("playerjob").ToString());
+                    ECharacter character = (ECharacter)Enum.Parse(typeof(ECharacter), reader.GetInt32("character").ToString());
                     int gold = reader.GetInt32("gold");
                     int level = reader.GetInt32("level");
                     int exp = reader.GetInt32("exp");
                     int mapNum = reader.GetInt32("mapnum");
-                    Pos pos = new Pos(reader.GetString("pos"));
-                    Player player = new Player(playerid, name, userid, sex, job, gold, level, exp, mapNum, pos);
+                    float posx = reader.GetFloat("posx");
+                    float posy = reader.GetFloat("posy");
+                    float posz = reader.GetFloat("posz");
+                    Pos pos = new Pos(posx,posy,posz);
+                    Player player = new Player(playerid, name, userid, sex, job, character, gold, level, exp, mapNum, pos);
                     playerList.Add(player);
                 }
                 return playerList;

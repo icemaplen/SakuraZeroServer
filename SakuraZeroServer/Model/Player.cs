@@ -16,25 +16,27 @@ namespace SakuraZeroServer.Model
         public float CritAttack { get; set; }   // 暴击伤害
 
         public EPlayerJob PlayerJob { get; set; }
+        public ECharacter Character { get; set; }
 
-        public Player(int playerid, string name, int userid, ESex sex, EPlayerJob playerJob, int gold, int level, int exp, int mapnum, Pos pos)
+        public Player(int playerid, string name, int userid, ESex sex, EPlayerJob playerJob, ECharacter character, int gold, int level, int exp, int mapnum, Pos pos)
         {
-
+            ID = playerid;
+            Name = name;
+            UserID = userid;
+            Sex = sex;
+            PlayerJob = playerJob;
+            Character = character;
+            Gold = gold;
+            Level = level;
+            Exp = exp;
+            MapNum = mapnum;
+            Pos = pos;
         }
-
-        /// <summary>
-        /// 下线
-        /// </summary>
-        /// <returns></returns>
-        public bool Logout()
-        {
-            // 事件处理
-            return true;
-        }
+        
 
         public override string ToString()
         {
-            string str = $"{ID}-{Name}-{Sex.ToString()}-{PlayerJob.ToString()}-{Gold}-{Level}-{Exp}-{MapNum}-{Pos.ToString()}";
+            string str = $"{ID}-{Name}-{Sex.ToString()}-{PlayerJob.ToString()}-{Character.ToString()}-{Gold}-{Level}-{Exp}-{MapNum}-{Pos.X}-{Pos.Y}-{Pos.Z}";
             return str;
         }
     }
