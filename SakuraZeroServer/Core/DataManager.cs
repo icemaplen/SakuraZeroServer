@@ -85,9 +85,9 @@ namespace SakuraZeroServer.Core
             return playerDAO.GetPlayers(userid);
         }
 
-        public bool CreateRole(int userid,string name,EPlayerJob job)
+        public bool CreateRole(int userid,string name,EPlayerJob job, ECharacter character)
         {
-            return playerDAO.CreatePlayer(userid, name, job);
+            return playerDAO.CreatePlayer(userid, name, job, character);
         }
 
         public int GetPlayerIDByName(string name)

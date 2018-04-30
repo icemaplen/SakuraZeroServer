@@ -49,20 +49,31 @@ namespace SakuraZeroServer.Controller
             int start = sizeof(Int32) * 3;
             ProtocolBytes p = protocol as ProtocolBytes;
             string name = p.GetString(start, ref start);
-            string jobStr = p.GetString(start, ref start);
-            EPlayerJob job = (EPlayerJob)Enum.Parse(typeof(EPlayerJob), jobStr);
-            bool isSuccess = dataMgr.CreateRole(conn.user.ID, name, job);
             ProtocolBytes result;
-            if (isSuccess)
+            if (dataMgr.GetPlayerIDByName(name) != -1)
             {
-                result = new ProtocolBytes(requestCode, EActionCode.CreateRole, EReturnCode.Success);
-                int roleid = dataMgr.GetPlayerIDByName(name);
-                Player player = dataMgr.GetPlayer(roleid);
-                result.AddString(player.ToString());
+                result = new ProtocolBytes(requestCode, EActionCode.CreateRole, EReturnCode.RepeatName);
             }
             else
             {
-                result = new ProtocolBytes(requestCode, EActionCode.CreateRole, EReturnCode.Failed);
+                string jobStr = p.GetString(start, ref start);
+                EPlayerJob job = (EPlayerJob)Enum.Parse(typeof(EPlayerJob), jobStr);
+
+                string characterStr = p.GetString(start, ref start);
+                ECharacter character = (ECharacter)Enum.Parse(typeof(ECharacter), characterStr);
+
+                bool isSuccess = dataMgr.CreateRole(conn.user.ID, name, job, character);
+                if (isSuccess)
+                {
+                    result = new ProtocolBytes(requestCode, EActionCode.CreateRole, EReturnCode.Success);
+                    //int roleid = dataMgr.GetPlayerIDByName(name);
+                    //Player player = dataMgr.GetPlayer(roleid);
+                    //result.AddString(player.ToString());
+                }
+                else
+                {
+                    result = new ProtocolBytes(requestCode, EActionCode.CreateRole, EReturnCode.Failed);
+                }
             }
             Send(conn, result);
         }

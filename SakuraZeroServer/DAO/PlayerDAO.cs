@@ -19,28 +19,15 @@ namespace SakuraZeroServer.DAO
             sqlConn = conn;
         }
 
-        public bool CreatePlayer(int userid, string name, EPlayerJob playerJob)
+        public bool CreatePlayer(int userid, string name, EPlayerJob playerJob, ECharacter character)
         {
-            int jobnum = 0;
-            switch (playerJob)
-            {
-                case EPlayerJob.None:
-                    jobnum = 0;
-                    break;
-                case EPlayerJob.Saber:
-                    jobnum = 1;
-                    break;
-                default:
-                    jobnum = 0;
-                    break;
-            }
-
             try
             {
-                MySqlCommand cmd = new MySqlCommand("insert into player(userid,name,playerjob) values(@userid,@name,@playerjob)", sqlConn);
+                MySqlCommand cmd = new MySqlCommand("insert into player(userid,name,playerjob,playercharacter) values(@userid,@name,@playerjob,@character)", sqlConn);
                 cmd.Parameters.AddWithValue("@userid", userid);
                 cmd.Parameters.AddWithValue("@name", name);
-                cmd.Parameters.AddWithValue("@playerjob", jobnum);
+                cmd.Parameters.AddWithValue("@playerjob", playerJob.ToString());
+                cmd.Parameters.AddWithValue("@character", character.ToString());
                 cmd.ExecuteNonQuery();
                 return true;
             }
@@ -90,21 +77,7 @@ namespace SakuraZeroServer.DAO
                 reader = cmd.ExecuteReader();
                 if (reader.Read())
                 {
-                    string name = reader.GetString("name");
-                    int userid = reader.GetInt32("userid");
-                    ESex sex = (ESex)Enum.Parse(typeof(ESex), reader.GetInt32("sex").ToString());
-                    EPlayerJob job = (EPlayerJob)Enum.Parse(typeof(EPlayerJob), reader.GetInt32("playerjob").ToString());
-                    ECharacter character = (ECharacter)Enum.Parse(typeof(ECharacter), reader.GetInt32("character").ToString());
-                    int gold = reader.GetInt32("gold");
-                    int level = reader.GetInt32("level");
-                    int exp = reader.GetInt32("exp");
-                    int mapNum = reader.GetInt32("mapnum");
-                    float posx = reader.GetFloat("posx");
-                    float posy = reader.GetFloat("posy");
-                    float posz = reader.GetFloat("posz");
-                    Pos pos = new Pos(posx, posy, posz);
-                    Player player = new Player(playerid, name, userid, sex, job, character, gold, level, exp, mapNum, pos);
-                    return player;
+                    return GetPlayerByReader(reader);
                 }
                 else
                 {
@@ -133,20 +106,7 @@ namespace SakuraZeroServer.DAO
                 reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    int playerid = reader.GetInt32("playerid");
-                    string name = reader.GetString("name");
-                    ESex sex = (ESex)Enum.Parse(typeof(ESex), reader.GetInt32("sex").ToString());
-                    EPlayerJob job = (EPlayerJob)Enum.Parse(typeof(EPlayerJob), reader.GetInt32("playerjob").ToString());
-                    ECharacter character = (ECharacter)Enum.Parse(typeof(ECharacter), reader.GetInt32("character").ToString());
-                    int gold = reader.GetInt32("gold");
-                    int level = reader.GetInt32("level");
-                    int exp = reader.GetInt32("exp");
-                    int mapNum = reader.GetInt32("mapnum");
-                    float posx = reader.GetFloat("posx");
-                    float posy = reader.GetFloat("posy");
-                    float posz = reader.GetFloat("posz");
-                    Pos pos = new Pos(posx,posy,posz);
-                    Player player = new Player(playerid, name, userid, sex, job, character, gold, level, exp, mapNum, pos);
+                    Player player = GetPlayerByReader(reader);
                     playerList.Add(player);
                 }
                 return playerList;
@@ -200,6 +160,26 @@ namespace SakuraZeroServer.DAO
                 Console.WriteLine("在 SavePlayerPos(Player player) 出现异常：\n" + e);
                 return false;
             }
+        }
+
+        public Player GetPlayerByReader(MySqlDataReader reader)
+        {
+            int playerid = reader.GetInt32("playerid");
+            int userid = reader.GetInt32("userid");
+            string name = reader.GetString("name");
+            ESex sex = (ESex)Enum.Parse(typeof(ESex), reader.GetString("sex"));
+            EPlayerJob job = (EPlayerJob)Enum.Parse(typeof(EPlayerJob), reader.GetString("playerjob"));
+            ECharacter character = (ECharacter)Enum.Parse(typeof(ECharacter), reader.GetString("playercharacter"));
+            int gold = reader.GetInt32("gold");
+            int level = reader.GetInt32("level");
+            int exp = reader.GetInt32("exp");
+            int mapNum = reader.GetInt32("mapnum");
+            float posx = reader.GetFloat("posx");
+            float posy = reader.GetFloat("posy");
+            float posz = reader.GetFloat("posz");
+            Pos pos = new Pos(posx, posy, posz);
+            Player player = new Player(playerid, name, userid, sex, job, character, gold, level, exp, mapNum, pos);
+            return player;
         }
     }
 }
