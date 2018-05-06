@@ -1,11 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using SakuraZeroServer.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SakuraZeroServer.Tool;
 
 namespace SakuraZeroServer.DAO
 {
@@ -25,7 +20,7 @@ namespace SakuraZeroServer.DAO
             {
                 MySqlCommand cmd = new MySqlCommand("select * from user where username = @username and password = @password", sqlConn);
                 cmd.Parameters.AddWithValue("@username", username);
-                cmd.Parameters.AddWithValue("@password", MD5Hash.GetHashCode(password));
+                cmd.Parameters.AddWithValue("@password", password);
                 reader = cmd.ExecuteReader();
                 if (reader.Read())
                 {
@@ -83,7 +78,7 @@ namespace SakuraZeroServer.DAO
             {
                 MySqlCommand cmd = new MySqlCommand("insert into user set username = @username , password = @password", sqlConn);
                 cmd.Parameters.AddWithValue("@username", username);
-                cmd.Parameters.AddWithValue("@password", MD5Hash.GetHashCode(password));
+                cmd.Parameters.AddWithValue("@password", password);
                 cmd.ExecuteNonQuery();
                 return true;
             }

@@ -61,7 +61,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\ServerNet.cs" />
-    <Compile Include="Tool\MD5Hash.cs" />
     <Compile Include="Tool\SqlConnHelper.cs" />
     <Compile Include="Tool\TimeStamp.cs" />
   </ItemGroup>

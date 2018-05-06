@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SakuraZeroServer.Model;
-using SakuraZeroServer.DAO;
 using SakuraZeroServer.Core;
 using SakuraZeroCommon.Core;
 using SakuraZeroCommon.Protocol;
@@ -12,7 +8,7 @@ using SakuraZeroCommon.Property;
 
 namespace SakuraZeroServer.Controller
 {
-    public class PlayerController:BaseController
+    public class PlayerController : BaseController
     {
         public PlayerController()
         {
@@ -38,13 +34,13 @@ namespace SakuraZeroServer.Controller
             }
             Send(conn, result);
         }
-        
+
         /// <summary>
         /// 返回值为Player
         /// </summary>
         /// <param name="conn"></param>
         /// <param name="protocol"></param>
-        public void CreateRole(Conn conn,ProtocolBase protocol)
+        public void CreateRole(Conn conn, ProtocolBase protocol)
         {
             int start = sizeof(Int32) * 3;
             ProtocolBytes p = protocol as ProtocolBytes;
@@ -63,17 +59,8 @@ namespace SakuraZeroServer.Controller
                 ECharacter character = (ECharacter)Enum.Parse(typeof(ECharacter), characterStr);
 
                 bool isSuccess = dataMgr.CreateRole(conn.user.ID, name, job, character);
-                if (isSuccess)
-                {
-                    result = new ProtocolBytes(requestCode, EActionCode.CreateRole, EReturnCode.Success);
-                    //int roleid = dataMgr.GetPlayerIDByName(name);
-                    //Player player = dataMgr.GetPlayer(roleid);
-                    //result.AddString(player.ToString());
-                }
-                else
-                {
-                    result = new ProtocolBytes(requestCode, EActionCode.CreateRole, EReturnCode.Failed);
-                }
+                EReturnCode returnCode = isSuccess ? EReturnCode.Success : EReturnCode.Failed;
+                result = new ProtocolBytes(requestCode, EActionCode.CreateRole, returnCode);
             }
             Send(conn, result);
         }
@@ -111,7 +98,7 @@ namespace SakuraZeroServer.Controller
             dataMgr.SavaPlayer(conn.player);
             conn.player = null;
 
-            ProtocolBytes result= new ProtocolBytes(requestCode, EActionCode.PlayerLogout, EReturnCode.Success);
+            ProtocolBytes result = new ProtocolBytes(requestCode, EActionCode.PlayerLogout, EReturnCode.Success);
             Send(conn, result);
         }
     }

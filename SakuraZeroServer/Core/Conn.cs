@@ -1,24 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using SakuraZeroServer.Controller;
 using SakuraZeroServer.Tool;
 using SakuraZeroCommon.Protocol;
 using SakuraZeroServer.Model;
 
 namespace SakuraZeroServer.Core
 {
-   public  class Conn
+    public class Conn
     {
         public const int BUFFER_SIZE = 1024;
         public Socket socket;
         public bool isUse = false;
-        public byte[] readBuff = new byte[BUFFER_SIZE];
+        public byte[] readBuff;
         public int buffCount = 0;       // 当前读缓冲区的长度
-        public byte[] lenBytes = new byte[sizeof(UInt32)];
+        public byte[] lenBytes = new byte[sizeof(Int32)];
         public Int32 msgLength = 0;
         public long lastTickTime = long.MinValue;   // 心跳时间
         public Player player;
@@ -45,7 +40,15 @@ namespace SakuraZeroServer.Core
 
         public string GetAddress()
         {
-            return isUse ? socket.RemoteEndPoint.ToString() : "无法获取地址";
+            try
+            {
+                return isUse ? socket.RemoteEndPoint.ToString() : "该Conn未使用，无法获取地址";
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine("未知错误，无法获取地址\n" + ex.Message);
+                return null;
+            }
         }
 
         public void Send(ProtocolBase protocol)

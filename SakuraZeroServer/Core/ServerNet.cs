@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 using SakuraZeroCommon.Protocol;
 using SakuraZeroCommon.Core;
 using SakuraZeroServer.Controller;
@@ -19,11 +17,11 @@ namespace SakuraZeroServer.Core
 
         public Socket serverCocket;
         public Conn[] conns;
-        public int maxConnCount = 50;       //最大连接数
-        public ProtocolBase protocol;
+        public int maxConnCount = 10;       //最大连接数
+        public ProtocolBase protocol;       //协议类型
 
         private System.Timers.Timer timer = new System.Timers.Timer(1000);      // 主定时器
-        public long heartBeatTime = 10;
+        private long heartBeatTime = 10;
         private Dictionary<ERequestCode, BaseController> requestDict;
 
 
@@ -63,11 +61,12 @@ namespace SakuraZeroServer.Core
         {
             InitRequestDict();
 
-            // 定时器
+            // 定时器，每隔1000ms执行一次
             timer.Elapsed += new System.Timers.ElapsedEventHandler(HandleMainTimer);
             timer.AutoReset = false;
             timer.Enabled = true;
 
+            // 初始化连接池
             conns = new Conn[maxConnCount];
             for (int i = 0; i < maxConnCount; i++)
             {
@@ -131,7 +130,7 @@ namespace SakuraZeroServer.Core
         /// <param name="ar"></param>
         private void ReceiveCallback(IAsyncResult ar)
         {
-            Conn conn = ar.AsyncState as Conn; 
+            Conn conn = ar.AsyncState as Conn;
             try
             {
                 int count = conn.socket.EndReceive(ar);
@@ -208,9 +207,6 @@ namespace SakuraZeroServer.Core
             }
             object[] objs = new object[] { conn, protocolBase };
             method.Invoke(controller, objs);
-
-            // 回射
-            //Send(conn, protocolBase);
         }
 
         /// <summary>
@@ -270,14 +266,17 @@ namespace SakuraZeroServer.Core
             timer.Start();
         }
 
+        /// <summary>
+        /// 心跳处理
+        /// </summary>
         private void HeartBeat()
         {
             long timeNow = TimeStamp.GetTimeStamp();
             foreach (Conn c in conns)
             {
-                if (c != null && c.isUse && c.lastTickTime<timeNow-heartBeatTime)
+                if (c != null && c.isUse && c.lastTickTime < timeNow - heartBeatTime)
                 {
-                    Console.WriteLine("[心跳断开]:"+c.GetAddress());
+                    Console.WriteLine("[心跳断开]:" + c.GetAddress());
                     lock (c)
                     {
                         c.Close();
