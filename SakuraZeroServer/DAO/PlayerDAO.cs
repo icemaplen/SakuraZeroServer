@@ -35,6 +35,22 @@ namespace SakuraZeroServer.DAO
             }
         }
 
+        public bool DeletePlayer(int playerid)
+        {
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand("delete from player where playerid = @playerid", sqlConn);
+                cmd.Parameters.AddWithValue("@playerid", playerid);
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("在删除角色的时候出现异常：" + e);
+                return false;
+            }
+        }
+
         public int GetPlayerIDByName(string name)
         {
             MySqlDataReader reader = null;

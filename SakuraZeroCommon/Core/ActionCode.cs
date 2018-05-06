@@ -20,6 +20,7 @@
         PlayerLogin,
         PlayerLogout,
         GetRoles,
-        CreateRole
+        CreateRole,
+        DeleteRole
     }
 }

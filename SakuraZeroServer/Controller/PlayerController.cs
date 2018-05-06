@@ -101,5 +101,26 @@ namespace SakuraZeroServer.Controller
             ProtocolBytes result = new ProtocolBytes(requestCode, EActionCode.PlayerLogout, EReturnCode.Success);
             Send(conn, result);
         }
+
+        public void DeleteRole(Conn conn, ProtocolBase protocol)
+        {
+            int start = sizeof(Int32) * 3;
+            ProtocolBytes p = protocol as ProtocolBytes;
+            int playerid = p.GetInt(start);
+            Player player = dataMgr.GetPlayer(playerid);
+            ProtocolBytes result;
+            if (player.UserID != conn.user.ID)
+            {
+                Console.WriteLine($"【警告】Player[{player.UserID}]不属于User[{conn.user.ID}]");
+                result = new ProtocolBytes(requestCode, EActionCode.DeleteRole, EReturnCode.Failed);
+            }
+            else
+            {
+                bool isSucceed = dataMgr.DeleteRole(playerid);
+                EReturnCode returnCode = isSucceed ? EReturnCode.Success : EReturnCode.Failed;
+                result = new ProtocolBytes(requestCode, EActionCode.DeleteRole, returnCode);
+            }
+            Send(conn, result);
+        }
     }
 }

@@ -86,6 +86,11 @@ namespace SakuraZeroServer.Core
             return playerDAO.CreatePlayer(userid, name, job, character);
         }
 
+        public bool DeleteRole(int playerid)
+        {
+            return playerDAO.DeletePlayer(playerid);
+        }
+
         public int GetPlayerIDByName(string name)
         {
             return playerDAO.GetPlayerIDByName(name);
