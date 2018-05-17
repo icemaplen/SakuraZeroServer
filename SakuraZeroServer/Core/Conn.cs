@@ -63,7 +63,7 @@ namespace SakuraZeroServer.Core
                 if (player != null)
                 {
                     // 玩家退出处理
-                    DataManager.Instance.SavaPlayer(player);
+                    //DataManager.Instance.SavaPlayer(player);
                 }
                 Console.WriteLine("[断开连接]" + GetAddress());
                 socket.Close();

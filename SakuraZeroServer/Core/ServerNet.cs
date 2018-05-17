@@ -21,7 +21,7 @@ namespace SakuraZeroServer.Core
         public ProtocolBase protocol;       //协议类型
 
         private System.Timers.Timer timer = new System.Timers.Timer(1000);      // 主定时器
-        private long heartBeatTime = 10;
+        private long heartBeatTime = 20;
         private Dictionary<ERequestCode, BaseController> requestDict;
 
 
@@ -275,6 +275,10 @@ namespace SakuraZeroServer.Core
             {
                 if (c != null && c.isUse && c.lastTickTime < timeNow - heartBeatTime)
                 {
+                    if (c.lastTickTime < timeNow - heartBeatTime)
+                    {
+                        Console.WriteLine("[心跳超时]。。。");
+                    }
                     Console.WriteLine("[心跳断开]:" + c.GetAddress());
                     lock (c)
                     {

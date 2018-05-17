@@ -94,7 +94,7 @@ namespace SakuraZeroServer.DAO
                     }
                     else
                     {
-                        cmd = new MySqlCommand("update inventory(count) values(@count) where playerid = @playerid and itemid = @itemid", sqlConn);
+                        cmd = new MySqlCommand("update inventory set count = @count where playerid = @playerid and itemid = @itemid", sqlConn);
                         cmd.Parameters.AddWithValue("@playerid", playerid);
                         cmd.Parameters.AddWithValue("@itemid", itemid);
                         cmd.Parameters.AddWithValue("@count", item.Count + deltaCount);
@@ -129,7 +129,7 @@ namespace SakuraZeroServer.DAO
             MySqlDataReader reader = null;
             try
             {
-                MySqlCommand cmd = new MySqlCommand("update inventory(isdressed) values(@isdressed) where playerid = @playerid and itemid = @itemid", sqlConn);
+                MySqlCommand cmd = new MySqlCommand("update inventory set isdressed = @isdressed where playerid = @playerid and itemid = @itemid", sqlConn);
                 cmd.Parameters.AddWithValue("@playerid", playerid);
                 cmd.Parameters.AddWithValue("@itemid", itemid);
                 cmd.Parameters.AddWithValue("@isdressed", tmpIsDressed);

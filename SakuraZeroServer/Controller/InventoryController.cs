@@ -20,7 +20,7 @@ namespace SakuraZeroServer.Controller
         public void GetAllItems(Conn conn, ProtocolBase protocol)
         {
             ProtocolBytes result;
-            List<Item> itemList = dataMgr.GetAllItems(conn.user.ID);
+            List<Item> itemList = dataMgr.GetAllItems(conn.player.ID);
             if (itemList != null)
             {
                 result = new ProtocolBytes(requestCode, EActionCode.GetAllItems, EReturnCode.Success);
