@@ -136,7 +136,6 @@ namespace SakuraZeroServer.Core
                 int count = conn.socket.EndReceive(ar);
                 if (count <= 0)
                 {
-                    Console.WriteLine($"收到[{conn.GetAddress()}]断开连接");
                     conn.Close();
                     return;
                 }
@@ -147,7 +146,7 @@ namespace SakuraZeroServer.Core
             }
             catch (System.Exception ex)
             {
-                Console.WriteLine($"[{conn.GetAddress()}]断开连接:" + ex);
+                Console.WriteLine($"ReceiveCallback产生异常:" + ex);
                 conn.Close();
             }
         }
