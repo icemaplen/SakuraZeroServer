@@ -21,6 +21,11 @@
         PlayerLogout,
         GetRoles,
         CreateRole,
-        DeleteRole
+        DeleteRole,
+
+        // Inventory
+        GetAllItems,
+        UpdateItem,
+        UpdateEquipmentStatus
     }
 }

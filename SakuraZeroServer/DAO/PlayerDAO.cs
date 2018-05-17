@@ -42,6 +42,10 @@ namespace SakuraZeroServer.DAO
                 MySqlCommand cmd = new MySqlCommand("delete from player where playerid = @playerid", sqlConn);
                 cmd.Parameters.AddWithValue("@playerid", playerid);
                 cmd.ExecuteNonQuery();
+
+                MySqlCommand cmd2 = new MySqlCommand("delete from inventory where playerid = @playerid", sqlConn);
+                cmd2.Parameters.AddWithValue("@playerid", playerid);
+                cmd2.ExecuteNonQuery();
                 return true;
             }
             catch (Exception e)
