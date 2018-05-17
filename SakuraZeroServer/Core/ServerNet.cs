@@ -89,7 +89,7 @@ namespace SakuraZeroServer.Core
             requestDict.Add(ERequestCode.User, new UserController());
             requestDict.Add(ERequestCode.System, new SystemController());
             requestDict.Add(ERequestCode.Player, new PlayerController());
-
+            requestDict.Add(ERequestCode.Inventory, new InventoryController());
             // TODO
         }
 

@@ -9,5 +9,6 @@
         System,
         User,
         Player,
+        Inventory
     }
 }

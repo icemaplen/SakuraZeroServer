@@ -47,14 +47,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\BaseController.cs" />
+    <Compile Include="Controller\InventoryController.cs" />
     <Compile Include="Controller\PlayerController.cs" />
     <Compile Include="Controller\SystemController.cs" />
     <Compile Include="Controller\UserController.cs" />
     <Compile Include="Core\Conn.cs" />
     <Compile Include="Core\DataManager.cs" />
+    <Compile Include="DAO\InventoryDAO.cs" />
     <Compile Include="DAO\PlayerDAO.cs" />
     <Compile Include="DAO\UserDAO.cs" />
     <Compile Include="Model\Enemy.cs" />
+    <Compile Include="Model\Item.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Role.cs" />
     <Compile Include="Model\User.cs" />

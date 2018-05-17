@@ -31,12 +31,14 @@ namespace SakuraZeroServer.Core
         private MySqlConnection sqlConn;
         private UserDAO userDao;
         private PlayerDAO playerDAO;
+        private InventoryDAO inventoryDAO;
 
         public DataManager()
         {
-            sqlConn = SqlConnHelper.Connect();
-            userDao = new UserDAO(sqlConn);
-            playerDAO = new PlayerDAO(sqlConn);
+            //sqlConn = SqlConnHelper.Connect();
+            userDao = new UserDAO(SqlConnHelper.Connect());
+            playerDAO = new PlayerDAO(SqlConnHelper.Connect());
+            inventoryDAO = new InventoryDAO(SqlConnHelper.Connect());
         }
 
         /// <summary>
@@ -104,6 +106,26 @@ namespace SakuraZeroServer.Core
         public bool SavePlayerPos(Player player)
         {
             return playerDAO.SavePlayerPos(player);
+        }
+
+        public List<Item> GetAllItems(int playerid)
+        {
+            return inventoryDAO.GetAllItems(playerid);
+        }
+
+        public Item FindItem(int playerid, int itemid)
+        {
+            return inventoryDAO.FindItem(playerid, itemid);
+        }
+
+        public bool UpdateItem(int playerid, int itemid, int deltaCount)
+        {
+            return inventoryDAO.UpdateItem(playerid, itemid, deltaCount);
+        }
+
+        public bool UpdateEquipmentStatus(int playerid, int itemid, bool isDressed)
+        {
+            return inventoryDAO.UpdateEquipmentStatus(playerid, itemid, isDressed);
         }
     }
 }
