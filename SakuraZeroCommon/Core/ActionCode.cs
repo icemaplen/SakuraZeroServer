@@ -22,10 +22,13 @@
         GetRoles,
         CreateRole,
         DeleteRole,
+        GetPos,
+        ChangePos,
 
         // Inventory
         GetAllItems,
         UpdateItem,
-        UpdateEquipmentStatus
+        UpdateEquipmentStatus,
+        UpdateGold
     }
 }

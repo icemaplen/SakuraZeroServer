@@ -160,15 +160,45 @@ namespace SakuraZeroServer.DAO
                 return false;
             }
         }
+       
+        public Pos GetPlayerPos(int playerid)
+        {
+            MySqlDataReader reader = null;
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand("select mapnum, posx, posy, posz from player where playerid = @playerid", sqlConn);
+                cmd.Parameters.AddWithValue("@playerid", playerid);
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    return new Pos(reader.GetInt32(0), reader.GetFloat(1), reader.GetFloat(2), reader.GetFloat(3));
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("在 GetPlayerPos(int playerid) 出现异常：\n" + e);
+            }
+            finally
+            {
+                if (reader != null) reader.Close();
+            }
+            return null;
+        }
 
-        public bool SavePlayerPos(Player player)
+        public bool SavePlayerPos(int playerid, Pos pos)
         {
             try
             {
-                MySqlCommand cmd = new MySqlCommand("update player set mapnum = @mapnum, pos = @pos where playerid = @playerid", sqlConn);
-                cmd.Parameters.AddWithValue("@mapnum", player.MapNum);
-                cmd.Parameters.AddWithValue("@pos", player.Pos.ToString());
-                cmd.Parameters.AddWithValue("@playerid", player.ID);
+                MySqlCommand cmd = new MySqlCommand("update player set mapnum = @mapnum, posx = @posx, posy = @posy, posz = @posz where playerid = @playerid", sqlConn);
+                cmd.Parameters.AddWithValue("@mapnum", pos.MapNum);
+                cmd.Parameters.AddWithValue("@posx", pos.X);
+                cmd.Parameters.AddWithValue("@posy", pos.Y);
+                cmd.Parameters.AddWithValue("@posz", pos.Z);
+                cmd.Parameters.AddWithValue("@playerid", playerid);
                 cmd.ExecuteNonQuery();
                 return true;
             }
@@ -179,7 +209,7 @@ namespace SakuraZeroServer.DAO
             }
         }
 
-        public Player GetPlayerByReader(MySqlDataReader reader)
+        private Player GetPlayerByReader(MySqlDataReader reader)
         {
             int playerid = reader.GetInt32("playerid");
             int userid = reader.GetInt32("userid");

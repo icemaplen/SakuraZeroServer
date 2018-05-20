@@ -5,6 +5,7 @@ using SakuraZeroServer.Core;
 using SakuraZeroCommon.Core;
 using SakuraZeroCommon.Protocol;
 using SakuraZeroCommon.Property;
+using SakuraZeroCommon.Tool;
 
 namespace SakuraZeroServer.Controller
 {
@@ -121,6 +122,39 @@ namespace SakuraZeroServer.Controller
                 result = new ProtocolBytes(requestCode, EActionCode.DeleteRole, returnCode);
             }
             Send(conn, result);
+        }
+
+        public void GetPos(Conn conn, ProtocolBase protocol)
+        {
+            ProtocolBytes p = protocol as ProtocolBytes;
+            Pos pos = dataMgr.GetPlayerPos(conn.player.ID);
+            ProtocolBytes result;
+            if (pos!=null)
+            {
+                result = new ProtocolBytes(requestCode, EActionCode.GetPos, EReturnCode.Success);
+                result.AddInt(pos.MapNum);
+                result.AddFloat(pos.X);
+                result.AddFloat(pos.Y);
+                result.AddFloat(pos.Z);
+            }
+            else
+            {
+                result = new ProtocolBytes(requestCode, EActionCode.GetPos, EReturnCode.Failed);
+            }
+            Send(conn, result);
+        }
+
+        public void ChangePos(Conn conn, ProtocolBase protocol)
+        {
+            int start = sizeof(Int32) * 3;
+            ProtocolBytes p = protocol as ProtocolBytes;
+            int mapNum = p.GetInt(start, ref start);
+            float posX = p.GetFloat(start, ref start);
+            float posY = p.GetFloat(start, ref start);
+            float posZ = p.GetFloat(start, ref start);
+
+            Pos pos = new Pos(mapNum, posX, posY, posZ);
+            dataMgr.SavePlayerPos(conn.player.ID, pos);
         }
     }
 }

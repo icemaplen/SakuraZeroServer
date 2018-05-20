@@ -74,5 +74,23 @@ namespace SakuraZeroServer.Controller
             }
             Send(conn, result);
         }
+
+        public void UpdateGold(Conn conn, ProtocolBase protocol)
+        {
+            int start = sizeof(Int32) * 3;
+            ProtocolBytes p = protocol as ProtocolBytes;
+            int playerid = conn.player.ID;
+            int gold = p.GetInt(start, ref start);
+            ProtocolBytes result;
+            if (dataMgr.UpdateGold(playerid, gold))
+            {
+                result = new ProtocolBytes(requestCode, EActionCode.UpdateGold, EReturnCode.Success);
+            }
+            else
+            {
+                result = new ProtocolBytes(requestCode, EActionCode.UpdateGold, EReturnCode.Failed);
+            }
+            Send(conn, result);
+        }
     }
 }

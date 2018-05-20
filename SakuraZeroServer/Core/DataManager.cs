@@ -4,6 +4,7 @@ using SakuraZeroServer.Tool;
 using SakuraZeroServer.Model;
 using SakuraZeroServer.DAO;
 using SakuraZeroCommon.Property;
+using SakuraZeroCommon.Tool;
 
 namespace SakuraZeroServer.Core
 {
@@ -103,9 +104,14 @@ namespace SakuraZeroServer.Core
             return playerDAO.SavePlayer(player);
         }
 
-        public bool SavePlayerPos(Player player)
+        public bool SavePlayerPos(int playerid, Pos pos)
         {
-            return playerDAO.SavePlayerPos(player);
+            return playerDAO.SavePlayerPos(playerid, pos);
+        }
+
+        public Pos GetPlayerPos(int playerid)
+        {
+            return playerDAO.GetPlayerPos(playerid);
         }
 
         public List<Item> GetAllItems(int playerid)
@@ -126,6 +132,11 @@ namespace SakuraZeroServer.Core
         public bool UpdateEquipmentStatus(int playerid, int itemid, bool isDressed)
         {
             return inventoryDAO.UpdateEquipmentStatus(playerid, itemid, isDressed);
+        }
+
+        public bool UpdateGold(int playerid, int gold)
+        {
+            return inventoryDAO.UpdateGold(playerid, gold);
         }
     }
 }

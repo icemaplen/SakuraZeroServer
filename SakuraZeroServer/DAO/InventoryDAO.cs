@@ -146,5 +146,27 @@ namespace SakuraZeroServer.DAO
             }
             return false;
         }
+
+        public bool UpdateGold(int playerid, int gold)
+        {
+            MySqlDataReader reader = null;
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand("update player set gold = @gold where playerid = @playerid", sqlConn);
+                cmd.Parameters.AddWithValue("@playerid", playerid);
+                cmd.Parameters.AddWithValue("@gold", gold);
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("在 UpdateGold(int playerid, int gold) 出现异常：\n" + e);
+            }
+            finally
+            {
+                if (reader != null) reader.Close();
+            }
+            return false;
+        }
     }
 }
